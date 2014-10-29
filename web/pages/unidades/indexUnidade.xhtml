@@ -1,0 +1,111 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+   <h:head>
+      <title>Unidades</title>
+      <h:outputStylesheet library="css" name="modelo.css" />
+   </h:head>
+   <h:body>     
+
+      <h:form id="formValidatorLogradouro">
+
+         <p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" />
+
+         <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false"
+                   resizable="false" showHeader="false">           
+            <p:graphicImage value="../../resources/loading.gif" />
+         </p:dialog>
+
+         <!-- Dialog confirmar cadastro -->
+         <p:confirmDialog appendTo="@(body)" 
+                          id="confDialogRegistrar"
+                          header="#{unidadeMB.headerSaveDialog()}"
+                          widgetVar="cadastrarDialog"
+                          message="Nota: Verifique se os dados foram informados corretamente.">
+            <p:commandButton value="Sim" 
+                             icon="ui-icon-check"
+                             process="@this" 
+                             actionListener="#{unidadeMB.salvarEndereco()}" 
+                             oncomplete="PF('cadastrarDialog').hide()"
+                             update=":formDialog:mensagens"/>
+            <p:commandButton value="Não" onclick="PF('cadastrarDialog').hide()"/>
+         </p:confirmDialog>
+
+         <p:dialog header="Preencha os campos para salvar"  id="dialogSaves" widgetVar="dialogSave" 
+                   resizable="false" draggable="false">
+            <h:form>
+               <p:panelGrid columns="2">
+                  <p:outputLabel value="Nome da Unidade"/>
+                  <p:inputText value="#{unidadeMB.unidade.local_Descricao}" required="true"/>
+                  <p:outputLabel value="Telefone"/>
+                  <p:inputMask value="#{unidadeMB.unidade.local_Telefone}" mask="(99)9999-9999" required="true"/>
+                  <p:outputLabel value="Cidade :"/>
+                  <p:inputText value="#{unidadeMB.cidade.cidadeDescricao}" required="true"/>
+                  <p:outputLabel value="UF :"/>
+                  <p:inputText value="#{unidadeMB.cidade.estado}" style="text-transform: uppercase" maxlength="2" size="2" required="true"/>
+                  <p:outputLabel value="Bairro"/>
+                  <p:inputText value="#{unidadeMB.bairro.bai_descricao}" required="true"/>                     
+                  <p:outputLabel value="CEP"/>
+                  <p:inputMask value="#{unidadeMB.logradouro.log_CEP}" mask="99999-999" required="true"/>
+                  <p:outputLabel value="Logradouro"/>
+                  <p:inputText value="#{unidadeMB.logradouro.log_descricao}" required="true"/> 
+                  <p:outputLabel value="Numero :"/>
+                  <p:inputText value="#{unidadeMB.unidade.local_Numero}" required="true"/>
+                  <p:panelGrid columns="3">
+                     <p:commandButton value="Verificar Cidade" actionListener="#{unidadeMB.searchCidade()}" update=":formDialog:mensagens,:formValidatorLogradouro:confDialogRegistrar" styleClass="styleBotoes" />
+                     <p:commandButton value="Verificar Bairro" actionListener="#{unidadeMB.searchBairro()}" update=":formDialog:mensagens,:formValidatorLogradouro:confDialogRegistrar" styleClass="styleBotoes"/>
+                     <p:commandButton value="Verificar Logradouro" actionListener="#{unidadeMB.searchLogradouro()}" update=":formDialog:mensagens,:formValidatorLogradouro:confDialogRegistrar" styleClass="styleBotoes"/>
+                  </p:panelGrid>
+                  <p:panelGrid columns="1">
+                     <p:commandButton value="Salvar" actionListener="#{unidadeMB.save()}" action="#{unidadeMB.listarUnidades()}"
+                                      update=":formDialog:mensagens,:formDialog:unidadeData" oncomplete="PF('dialogSave').hide()"/>
+                  </p:panelGrid>
+               </p:panelGrid>
+            </h:form>
+         </p:dialog>
+
+      </h:form>
+
+      <h:form id="formDialog" styleClass="noborderTable">
+
+         <p:growl id="mensagens" showDetail="true" sticky="true" />          
+
+         <!-- dataTable com os objetos -->
+         <center>
+            <p:dataTable id="unidadeData" var="unidadeDT" value="#{unidadeMB.listUnidades}" rowKey="#{unidadeDT.local_id}" style="max-width: 900px; min-width: 500px">
+               <f:facet name="header">
+                  <p:spacer height="10" width="160"/>
+                  Unidades de Atendimento
+                  <p:spacer height="10" width="150"/>
+                  <p:commandButton id="openDialog" value="Novo" onclick="PF('dialogSave').show();"/>
+               </f:facet>
+
+               <p:column selectionMode="single" style="width:16px;text-align:center"/>
+               <p:column headerText="Nome da Unidade de Atendimento">
+                  <p:outputLabel value="#{unidadeDT.local_Descricao}"/>
+               </p:column>
+               <p:column headerText="Telefone">
+                  <p:outputLabel value="#{unidadeDT.local_Telefone}"/>
+               </p:column>
+               <p:column headerText="Endereço">
+                  <p:outputLabel value="#{unidadeDT.local_log_id.log_descricao}"/>
+               </p:column>
+               <p:column headerText="Bairro">
+                  <p:outputLabel value="#{unidadeDT.local_log_id.log_bairro_id.bai_descricao}"/>
+               </p:column>
+               <p:column headerText="Cidade">
+                  <p:outputLabel value="#{unidadeDT.local_log_id.log_bairro_id.cidade.cidadeDescricao}"/>
+               </p:column>
+               <f:facet name="footer">
+                  <p:commandButton value="Alterar"/>
+                  <p:commandButton value="Excluir"/>
+               </f:facet>
+            </p:dataTable>  
+         </center>
+      </h:form>
+   </h:body>
+</html>
+

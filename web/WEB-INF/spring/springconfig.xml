@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:security="http://www.springframework.org/schema/security"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+	   http://www.springframework.org/schema/beans/spring-beans.xsd 
+	   http://www.springframework.org/schema/security 
+	   http://www.springframework.org/schema/security/spring-security-3.1.xsd">
+
+
+	<security:http auto-config="false" use-expressions="true">
+		<security:intercept-url pattern="/faces/pages/controller/gerencia/**"
+			access="hasRole('ROLE_GERENTE')" />
+		<security:intercept-url pattern="/faces/pages/controller/**"
+			access="hasAnyRole('ROLE_ESCRITURARIO','ROLE_GERENTE')" />
+
+		<security:form-login login-page="/faces/pages/login.xhtml"
+			authentication-failure-url="/faces/pages/login.xhtml?erro=true"
+			default-target-url="/faces/pages/controller/loginEfetuado.xhtml" />
+	</security:http>
+
+	<security:authentication-manager>
+		<security:authentication-provider>
+			<security:jdbc-user-service data-source-ref="dataSource"
+				users-by-username-query="SELECT pro_login as username, pro_senha as password, 'true' as enable FROM profissional WHERE pro_login=?;"
+				authorities-by-username-query="SELECT profissional.pro_login as username, permissao.permi_roles as authority FROM profissional,permissao WHERE profissional.pro_login=? and profissional.pro_permissoes_id = permissao.permi_id;" />
+		</security:authentication-provider>
+	</security:authentication-manager>
+
+	<bean id="dataSource"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="url" value="jdbc:mysql://localhost:3306/sicis" />
+		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
+		<property name="username" value="root" />
+		<property name="password" value="root" />
+	</bean>
+
+	<!-- <security:authentication-manager> <security:authentication-provider> 
+		<security:user-service> <security:user name="user" password="123" authorities="ROLE_USER" 
+		/> <security:user name="admin" password="admin" authorities="ROLE_ADMIN" 
+		/> </security:user-service> </security:authentication-provider> </security:authentication-manager> -->
+</beans>

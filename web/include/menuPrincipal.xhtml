@@ -1,0 +1,65 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:ui="http://java.sun.com/jsf/facelets">
+
+   <h:head>
+      <h:outputStylesheet library="css" name="modelo.css" />
+   </h:head>
+
+   <h:form>
+      <p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" />
+
+      <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false"
+                resizable="false" showHeader="false">           
+         <p:graphicImage value="../../resources/loading.gif" />
+      </p:dialog>
+      <p:menubar>
+         <p:menuitem value="Home"
+                     action="/pages/controller/loginEfetuado.xhtml?faces-redirect=true" />
+
+         <p:submenu label="Pacientes" icon="ui-icon-person"
+                    rendered="#{request.isUserInRole('ROLE_GERENTE') or request.isUserInRole('ROLE_ESCRITURARIO')}">
+            <p:submenu label="Registros">
+               <p:menuitem value="Cadastrar" icon="ui-icon-document"
+                           action="/pages/controller/agendamento/paciente/novoPaciente.xhtml?faces-redirect=true" />
+               <p:menuitem value="Buscar" icon="ui-icon-document" action="/pages/controller/agendamento/paciente/buscarPaciente.xhtml?faces-redirect=true"/>
+            </p:submenu>
+         </p:submenu>
+
+         <p:submenu label="Gerencia">
+
+            <p:submenu label="Profissionais">
+               <p:submenu label="Registros">
+                  <p:menuitem value="Cadastrar"
+                              action="/pages/controller/gerencia/profissional/novoProfissional.xhtml?faces-redirect=true" />
+                  <p:menuitem value="Buscar" />
+               </p:submenu>
+               <p:menuitem value="Restrissões"
+                           action="/pages/controller/gerencia/profissional/restricoes.xhtml?faces-redirect=true" />
+            </p:submenu>
+            <p:menuitem value="Unidades"
+                        action="/pages/controller/gerencia/unidade/unidade.xhtml?faces-redirect=true" />
+         </p:submenu>
+
+         <p:submenu label="Agendamento">
+            <p:submenu label="Exames">
+               <p:menuitem value="Gerenciar Cadastros"
+                           action="/pages/controller/agendamento/examesCadastrados.xhtml?faces-redirect=true" />
+               <p:menuitem value="Buscar" />
+            </p:submenu>
+            <p:submenu label="Agendar">
+               <p:menuitem value="Exames" />
+               <p:menuitem value="Consultas" />
+            </p:submenu>
+         </p:submenu>
+
+         <p:menuitem value="Logout"
+                     action="/pages/login.xhtml?faces-redirect=true"
+                     oncomplete="jQuery.get('{request.contextPath}/j_spring_security_logout')" />
+      </p:menubar>
+   </h:form>
+
+</ui:composition>

@@ -1,0 +1,222 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+   <h:head>
+      <h:outputStylesheet library="css" name="modelo.css" />
+      <title>Pacientes</title>
+   </h:head>
+
+   <h:body>
+      <center>
+         <h:form id="formPacientes">
+
+            <p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" />
+
+            <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false"
+                      resizable="false" showHeader="false">           
+               <p:graphicImage value="../../resources/loading.gif" />
+            </p:dialog>
+
+            <p:growl id="mensagens" showDetail="true" sticky="true" />
+
+            <!-- Dialog confirmar cadastro -->
+            <p:confirmDialog appendTo="@(body)" id="confDialogRegistrar"
+                             header="#{novoPacienteMB.ajustarHeader()}"
+                             widgetVar="cadastrarDialog"
+                             message="Nota: Verifique se os dados foram informados corretamente.">
+               <p:commandButton value="Sim" icon="ui-icon-check" process="@this"
+                                actionListener="#{novoPacienteMB.saveEndereco()}"
+                                oncomplete="PF('cadastrarDialog').hide()" />
+               <p:commandButton value="Não" onclick="PF('cadastrarDialog').hide()" />
+            </p:confirmDialog>
+
+            <!-- Dialog selecionar logradouro -->
+            <p:dialog id="logDialogDT" header="Logradouros Encontrados :"
+                      widgetVar="logDialogDT">
+               <p:dataTable id="selectLogradouroDT" var="selectLogradouroDT"
+                            value="#{novoPacienteMB.listaLogradouro}"
+                            selection="#{novoPacienteMB.logSelecionado}"
+                            rowKey="#{selectLogradouroDT.log_id}"
+                            style="max-width: 800px; min-width: 550px">
+                  <f:facet name="header">
+                     Logradouros
+                  </f:facet>
+                  <p:column selectionMode="single"
+                            style="width:16px;text-align:center" />
+                  <p:column headerText="Id">
+                     <h:outputText value="#{selectLogradouroDT.log_id}" />
+                  </p:column>
+                  <p:column headerText="Descricao">
+                     <h:outputText value="#{selectLogradouroDT.log_descricao}" />
+                  </p:column>
+                  <f:facet name="footer">
+                     <p:commandButton process="selectLogradouroDT" value="Selecionar"
+                                      actionListener="#{novoPacienteMB.selecionarItemDatabase()}"
+                                      oncomplete="PF('logDialogDT').hide();"
+                                      update=":formPacientes:inputLogradouro,:formPacientes:mensagens" />
+                  </f:facet>
+               </p:dataTable>
+            </p:dialog>
+
+            <p:wizard nextLabel="Proximo" backLabel="Voltar"
+                      styleClass="borderForms">
+
+               <p:tab title="Dados Pessoais">
+                  <center>
+                     <p:panelGrid columns="1" columnClasses="grid">
+                        <p:outputLabel value="Número do CNS :" />
+                        <p:inputMask required="true" mask="999.9999.9999.9999"
+                                     value="#{novoPacienteMB.cliente.cli_CNS}" />
+                        <p:outputLabel value="CPF :" />
+                        <p:inputMask mask="999.999.999-99"
+                                     value="#{novoPacienteMB.cliente.cli_CPF}" />
+                        <p:outputLabel value="RG :" />
+                        <p:inputText value="#{novoPacienteMB.cliente.cli_RG}" />
+                        <p:outputLabel value="Nome :" />
+                        <p:inputText value="#{novoPacienteMB.cliente.cli_nome}" />
+                        <p:outputLabel value="Nome da mãe :" />
+                        <p:inputText value="#{novoPacienteMB.cliente.cli_nomedamae}" />
+                        <p:outputLabel value="Nome do pai :" />
+                        <p:inputText value="#{novoPacienteMB.cliente.cli_nomedopai}" />
+                        <p:outputLabel value="Data de Nascimento :" />
+                        <p:calendar navigator="true" mask="true" pattern="dd/MM/yyyy"
+                                    value="#{novoPacienteMB.cliente.cli_nasc}">
+                           <p:ajax event="blur" listener="#{novoPacienteMB.ajustarData()}" />
+                        </p:calendar>
+                        <p:outputLabel value="Sexo :" />
+                        <p:selectOneRadio id="selectSexo"
+                                          value="#{novoPacienteMB.cliente.cli_sexo}">
+                           <f:selectItem itemLabel="Feminino" itemValue="Feminino" />
+                           <f:selectItem itemLabel="Masculino" itemValue="Masculino" />
+                        </p:selectOneRadio>
+                        <p:outputLabel value="Cor :" />
+                        <p:selectOneMenu id="selectEtnia"
+                                         value="#{novoPacienteMB.cliente.cli_cor}">
+                           <f:selectItem itemLabel="Sem informação"
+                                         itemValue="Sem informaçao" />
+                           <f:selectItem itemLabel="Branco" itemValue="Branco" />
+                           <f:selectItem itemLabel="Negro" itemValue="Negro" />
+                           <f:selectItem itemLabel="Amarelo" itemValue="Amarelo" />
+                           <f:selectItem itemLabel="Parda" itemValue="Parda" />
+                        </p:selectOneMenu>
+                        <p:outputLabel value="Telefone" />
+                        <p:inputMask mask="(99)99999-9999"
+                                     value="#{novoPacienteMB.cliente.cli_telefone}" />
+                     </p:panelGrid>
+                  </center>
+               </p:tab>
+
+               <p:tab title="Endereço">
+                  <p:panelGrid columns="1">
+                     <p:outputLabel value="Cidade / UF :" />
+                     <p:panelGrid columns="3">
+                        <p:inputText required="true"
+                                     value="#{novoPacienteMB.cidade.cidadeDescricao}" />
+                        <p:inputText style="text-transform: uppercase" size="1"
+                                     maxlength="2" value="#{novoPacienteMB.cidade.estado}" />
+                        <p:commandButton value="Buscar"
+                                         actionListener="#{novoPacienteMB.searchCidade()}"
+                                         update="mensagens,confDialogRegistrar" />
+                     </p:panelGrid>
+                     <p:outputLabel value="Bairro :" />
+                     <p:panelGrid columns="2">
+                        <p:inputText value="#{novoPacienteMB.bairro.bai_descricao}" />
+                        <p:commandButton value="Buscar"
+                                         actionListener="#{novoPacienteMB.searchBairro()}"
+                                         update="mensagens,confDialogRegistrar" />
+                     </p:panelGrid>
+                     <p:outputLabel value="CEP :" />
+                     <p:inputMask mask="99999999"
+                                  value="#{novoPacienteMB.logradouro.log_CEP}" />
+                     <p:outputLabel value="Logradouro / Número :" />
+                     <p:panelGrid columns="3">
+                        <p:inputText id="inputLogradouro"
+                                     value="#{novoPacienteMB.logradouro.log_descricao}" />
+                        <p:inputText size="3" maxlength="10"
+                                     value="#{novoPacienteMB.cliente.cli_numeroResidencial}" />
+                        <p:commandButton value="Buscar"
+                                         actionListener="#{novoPacienteMB.listLogradouros()}"
+                                         update="mensagens,confDialogRegistrar,logDialogDT" />
+                     </p:panelGrid>
+                  </p:panelGrid>
+               </p:tab>
+               <p:tab title="Unidade Básica de Saúde">
+                  <p:panelGrid columns="1">
+                     <p:outputLabel value="Unidade pertencente :" />
+                     <p:selectOneListbox value="#{novoPacienteMB.prontuario.unidade}"
+                                         converter="entityConverter" filter="true">
+                        <f:selectItem itemLabel="Selecione" />
+                        <f:selectItems value="#{unidadeMB.listUnidades}"
+                                       itemValue="#{unidadeList}"
+                                       itemLabel="#{unidadeList.local_Descricao}" var="unidadeList" />
+                     </p:selectOneListbox>
+                     <p:outputLabel value="Prontuário :" />
+                     <p:inputText value="#{novoPacienteMB.prontuario.pront_numeracao}" />
+                  </p:panelGrid>
+               </p:tab>
+               <p:tab title="Confirmar">
+                  <p:panelGrid columns="2" columnClasses="label,value">
+                     <p:outputLabel value="Número do CNS :" />
+                     <p:outputLabel value="#{novoPacienteMB.cliente.cli_CNS}"
+                                    styleClass="outputLabel" />
+                     <p:outputLabel value="CPF :" />
+                     <p:outputLabel value="#{novoPacienteMB.cliente.cli_CPF}"
+                                    styleClass="outputLabel" />
+                     <p:outputLabel value="RG :" />
+                     <p:outputLabel value="#{novoPacienteMB.cliente.cli_RG}"
+                                    styleClass="outputLabel" />
+                     <p:outputLabel value="Nome :" />
+                     <p:outputLabel value="#{novoPacienteMB.cliente.cli_nome}"
+                                    styleClass="outputLabel" />
+                     <p:outputLabel value="Nome da mãe :" />
+                     <p:outputLabel value="#{novoPacienteMB.cliente.cli_nomedamae}"
+                                    styleClass="outputLabel" />
+                     <p:outputLabel value="Nome do pai :" />
+                     <p:outputLabel value="#{novoPacienteMB.cliente.cli_nomedopai}"
+                                    styleClass="outputLabel" />
+                     <p:outputLabel value="Data de Nascimento:" />
+                     <p:outputLabel value="#{novoPacienteMB.dataConvertida}"
+                                    styleClass="outputLabel" />
+                     <p:outputLabel value="Sexo :" />
+                     <p:outputLabel value="#{novoPacienteMB.cliente.cli_sexo}"
+                                    styleClass="outputLabel" />
+                     <p:outputLabel value="Cor :" />
+                     <p:outputLabel value="#{novoPacienteMB.cliente.cli_cor}"
+                                    styleClass="outputLabel" />
+                     <p:outputLabel value="Telefone :" />
+                     <p:outputLabel value="#{novoPacienteMB.cliente.cli_telefone}"
+                        styleClass="outputLabel" />
+                     <p:outputLabel value="Cidade / UF :" />
+                     <p:outputLabel
+                        value="#{novoPacienteMB.cidade.cidadeDescricao} - #{novoPacienteMB.cidade.estado}"
+                        styleClass="outputLabel" />
+                     <p:outputLabel value="Bairro :" />
+                     <p:outputLabel value="#{novoPacienteMB.bairro.bai_descricao}"
+                                    styleClass="outputLabel" />
+                     <p:outputLabel value="Logradouro :" />
+                     <p:outputLabel
+                        value="#{novoPacienteMB.logradouro.log_descricao}, #{novoPacienteMB.cliente.cli_numeroResidencial}"
+                        styleClass="outputLabel" />
+                     <p:outputLabel value="Unidade Pertencente :" />
+                     <p:outputLabel
+                        value="#{novoPacienteMB.prontuario.unidade.local_Descricao}"
+                        styleClass="outputLabel" />
+                     <p:outputLabel value="Prontuario :" />
+                     <p:outputLabel
+                        value="#{novoPacienteMB.prontuario.pront_numeracao}"
+                        styleClass="outputLabel" />
+                     <p:commandButton value="Confirmar"
+                                      action="#{novoPacienteMB.confirmSave()}"
+                                      update="mensagens">
+                     </p:commandButton>
+                  </p:panelGrid>
+               </p:tab>
+            </p:wizard>
+         </h:form>
+      </center>
+   </h:body>
+</html>
+

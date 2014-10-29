@@ -1,0 +1,34 @@
+/* 
+    Created on : 10/07/2014, 21:17:32
+    Author     : Douglas
+*/
+
+.ui-layout-north {
+   z-index: 3!important;
+   overflow: visible!important;
+}
+.ui-layout-north .ui-layout-unit-content {
+   overflow: visible!important;
+}
+
+.ui-menu,.ui-menubar,.ui-menu-child {
+   min-width: 180px!important;
+}
+
+.semborda{
+   border:none!important;
+}
+.styleBotoes{
+   font-size: 15px !important;
+   height:50px;
+   width: 110px;
+}
+
+.noborderTable tr, .noborderTable td {  
+   border: none !important;  
+}  
+.borderForms{
+   border-width: medium;
+   border-style: solid;
+   border-color: black;
+}

@@ -1,0 +1,34 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+   <h:head>
+      <title>Restrições</title>
+   </h:head>
+   <h:body>
+      <h:form id="formRestricoes">
+         <p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" />
+
+         <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false"
+                   resizable="false" showHeader="false">           
+            <p:graphicImage value="../../resources/loading.gif" />
+         </p:dialog>
+         <center>
+            <p:dataTable id="restricoesDT" var="restricoesDT" value="#{permissaoMB.listPermissoes()}" rowKey="#{restricoesDT.permi_id}" style="max-width: 800px; min-width: 550px">
+               <f:facet name="header">
+                  Lista de Restrições
+               </f:facet>
+               <p:column headerText="Restrição">
+                  <p:outputLabel value="#{restricoesDT.permi_titulo}" />
+               </p:column>
+               <p:column headerText="Descrição">
+                  <p:outputLabel value="#{restricoesDT.permi_Descricao}"/>
+               </p:column>
+            </p:dataTable>
+         </center>
+      </h:form>
+   </h:body>
+</html>
+

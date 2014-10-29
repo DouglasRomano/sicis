@@ -1,0 +1,181 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+   <h:head>
+      <h:outputStylesheet library="css" name="modelo.css" />
+      <title>Pacientes</title>
+   </h:head>
+
+   <h:body>
+      <h:form id="formInput">
+         <p:growl id="mensagens" showDetail="true" sticky="true" />
+
+         <p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" />
+
+         <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false"
+                   resizable="false" showHeader="false">           
+            <p:graphicImage value="../../resources/loading.gif" />
+         </p:dialog>
+
+         <div align="center">
+            <p:tabView dynamic="true" id="tableView" style="width: 40%">            
+               <p:tab title="Dados Pessoas">               
+                  <p:panelGrid columns="1">                  
+                     <p:outputLabel value="Número do CNS :" />
+                     <p:inputMask mask="999.9999.9999.9999"
+                                  id="inputMaskCNS"
+                                  value="#{buscarPacienteMB.cliente.cli_CNS}">
+                        <p:ajax event="blur" update="inputMaskCPF,inputMaskNome,inputMaskMae,
+                                inputMaskNasc"/>
+                     </p:inputMask>
+                     <p:outputLabel value="CPF :" />
+                     <p:inputMask mask="999.999.999-99"
+                                  id="inputMaskCPF"
+                                  value="#{buscarPacienteMB.cliente.cli_CPF}"                                
+                                  disabled="#{not empty buscarPacienteMB.cliente.cli_CNS}">
+                        <p:ajax event="blur" update="inputMaskCNS,inputMaskNome,inputMaskMae,inputMaskNasc"/>
+                     </p:inputMask>
+                     <p:outputLabel value="Nome :" />
+                     <p:inputText value="#{buscarPacienteMB.cliente.cli_nome}"
+                                  id="inputMaskNome"
+                                  disabled="#{not empty buscarPacienteMB.cliente.cli_CNS}"/>
+                     <p:outputLabel value="Nome da mãe :" />                        
+                     <p:inputText value="#{buscarPacienteMB.cliente.cli_nomedamae}"
+                                  id="inputMaskMae"
+                                  disabled="#{not empty buscarPacienteMB.cliente.cli_CNS or not empty buscarPacienteMB.cliente.cli_CPF}"/>
+                     <p:outputLabel value="Data de Nascimento :" />
+                     <p:calendar navigator="true" mask="true" pattern="dd/MM/yyyy"
+                                 id="inputMaskNasc"
+                                 value="#{buscarPacienteMB.cliente.cli_nasc}"
+                                 disabled="#{not empty buscarPacienteMB.cliente.cli_CNS or not empty buscarPacienteMB.cliente.cli_CPF}">
+                     </p:calendar>                  
+                     <p:commandButton value="Procurar" actionListener="#{buscarPacienteMB.searchPacientebyDocs()}"
+                                      update=":formTable:dialogTable,:formTable:dialogPaciente,:formInput:mensagens" />
+                  </p:panelGrid>               
+               </p:tab>
+
+               <p:tab title="Unidade">
+                  <p:panelGrid columns="1">
+                     <p:outputLabel value="Unidade pertencente :" />
+                     <p:selectOneListbox value="#{buscarPacienteMB.prontuario.unidade}"
+                                         converter="entityConverter" filter="true">
+                        <f:selectItem itemLabel="Selecione" />
+                        <f:selectItems value="#{unidadeMB.listUnidades}"
+                                       itemValue="#{unidadeList}"
+                                       itemLabel="#{unidadeList.local_Descricao}" var="unidadeList" />
+                     </p:selectOneListbox>
+                     <p:outputLabel value="Prontuário :" />
+                     <p:inputText value="#{novoPacienteMB.prontuario.pront_numeracao}" />
+
+                     <p:commandButton value="Procurar" actionListener="#{buscarPacienteMB.searchPacientebyProntuario()}"
+                                      update=":formTable:dialogTable,:formTable:dialogPaciente,:formInput:mensagens"/>
+                  </p:panelGrid>
+               </p:tab>                
+            </p:tabView> 
+         </div>
+
+      </h:form>
+
+      <h:form id="formTable">
+
+         <p:dialog id="dialogPaciente" header="Clique duas vezes caso queria alterar" modal="true" appendTo="@(body)"
+                   widgetVar="dialogPaciente" style="width: 60%" >
+            <p:ajax event="close" update=":formInput:tableView" listener="#{buscarPacienteMB.restartObjetos()}"/>
+            <p:panelGrid columns="2" columnClasses="label,value">
+               <p:outputLabel value="Número do CNS :" />
+               <p:outputLabel value="#{buscarPacienteMB.clienteSelecionado.cli_CNS}"
+                              styleClass="outputLabel" />
+               <p:outputLabel value="CPF :" />
+               <p:outputLabel value="#{buscarPacienteMB.clienteSelecionado.cli_CPF}"
+                              styleClass="outputLabel" />
+               <p:outputLabel value="RG :" />
+               <p:outputLabel value="#{buscarPacienteMB.clienteSelecionado.cli_RG}"
+                              styleClass="outputLabel" />
+               <p:outputLabel value="Nome :" />
+               <p:outputLabel value="#{buscarPacienteMB.clienteSelecionado.cli_nome}"
+                              styleClass="outputLabel" />
+               <p:outputLabel value="Nome da mãe :" />
+               <p:outputLabel value="#{buscarPacienteMB.clienteSelecionado.cli_nomedamae}"
+                              styleClass="outputLabel" />
+               <p:outputLabel value="Nome do pai :" />
+               <p:outputLabel value="#{buscarPacienteMB.clienteSelecionado.cli_nomedopai}"
+                              styleClass="outputLabel" />
+               <p:outputLabel value="Data de Nascimento:" />
+               <p:outputLabel value="#{buscarPacienteMB.dataConvertida}"
+                              styleClass="outputLabel" />
+               <p:outputLabel value="Sexo :" />
+               <p:outputLabel value="#{buscarPacienteMB.clienteSelecionado.cli_sexo}"
+                              styleClass="outputLabel" />
+               <p:outputLabel value="Cor :" />
+               <p:outputLabel value="#{buscarPacienteMB.clienteSelecionado.cli_cor}"
+                              styleClass="outputLabel" />
+               <p:outputLabel value="Telefone :" />
+               <p:outputLabel
+                  value="#{buscarPacienteMB.clienteSelecionado.cli_telefone}"
+                  styleClass="outputLabel" />
+               <p:outputLabel value="Cidade / UF :" />
+               <p:outputLabel
+                  value="#{buscarPacienteMB.clienteSelecionado.cli_log_id.log_bairro_id.cidade.cidadeDescricao} - 
+                  #{buscarPacienteMB.clienteSelecionado.cli_log_id.log_bairro_id.cidade.estado}"
+                  styleClass="outputLabel" />
+               <p:outputLabel value="Bairro :" />
+               <p:outputLabel value="#{buscarPacienteMB.clienteSelecionado.cli_log_id.log_bairro_id.bai_descricao}"
+                              styleClass="outputLabel" />
+               <p:outputLabel value="Logradouro :" />
+               <p:outputLabel
+                  value="#{buscarPacienteMB.clienteSelecionado.cli_log_id.log_descricao}, #{buscarPacienteMB.clienteSelecionado.cli_numeroResidencial}"
+                  styleClass="outputLabel" />
+               <p:outputLabel value="Unidade Pertencente :" />
+               <p:outputLabel
+                  value="#{buscarPacienteMB.prontuario.unidade.local_Descricao}"
+                  styleClass="outputLabel" />
+               <p:outputLabel value="Prontuario :" />
+               <p:outputLabel
+                  value="#{buscarPacienteMB.prontuario.pront_numeracao}"
+                  styleClass="outputLabel" />
+            </p:panelGrid>    
+            <p:commandButton value="Atualizar"/>
+         </p:dialog>
+
+         <p:dialog id="dialogTable"  widgetVar="dialogTable"  modal="true" appendTo="@(body)">
+            <h:form id="dlgForm">
+               <p:dataTable id="radioDT" var="cliente" value="#{buscarPacienteMB.listCliente}" 
+
+                            selection="#{buscarPacienteMB.clienteSelecionado}" rowKey="#{cliente.cli_id}" 
+                            widgetVar="radioDT">
+                  <f:facet name="header">
+                     Selecione o paciente procurado
+                  </f:facet>
+                  <p:column selectionMode="single" style="width:16px;text-align:center" />
+                  <p:column headerText="Nome">
+                     <h:outputText value="#{cliente.cli_nome}" />
+                  </p:column>
+                  <p:column headerText="CNS">
+                     <h:outputText value="#{cliente.cli_CNS}" />
+                  </p:column>
+                  <p:column headerText="CPF">
+                     <h:outputText value="#{cliente.cli_CPF}" />
+                  </p:column>
+                  <p:column headerText="Nascimento">
+                     <h:outputText value="#{cliente.cli_nasc}" />
+                  </p:column>
+                  <p:column headerText="Mãe">
+                     <h:outputText value="#{cliente.cli_nomedamae}" />
+                  </p:column>
+                  <f:facet name="footer">
+                     <p:commandButton process="radioDT" value="Selecionar" actionListener="#{buscarPacienteMB.selecionarPacienteDT()}"
+                                      oncomplete="PF('dialogTable').hide();PF('dialogPaciente').show();"
+                                      update=":formTable:dialogPaciente">
+
+                     </p:commandButton>
+                  </f:facet>
+               </p:dataTable>
+            </h:form>
+         </p:dialog>
+      </h:form>
+   </h:body>
+</html>
+
