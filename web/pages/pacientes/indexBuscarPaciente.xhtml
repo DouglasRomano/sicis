@@ -85,57 +85,103 @@
                    widgetVar="dialogPaciente" style="width: 60%" >
             <p:ajax event="close" update=":formInput:tableView" listener="#{buscarPacienteMB.restartObjetos()}"/>
             <p:panelGrid columns="2" columnClasses="label,value">
+
                <p:outputLabel value="Número do CNS :" />
-               <p:outputLabel value="#{buscarPacienteMB.clienteSelecionado.cli_CNS}"
-                              styleClass="outputLabel" />
+               <p:inplace effectSpeed="fast" event="dblclick">
+                  <p:inputText value="#{buscarPacienteMB.clienteSelecionado.cli_CNS}"
+                               styleClass="outputLabel" />
+               </p:inplace>
+
                <p:outputLabel value="CPF :" />
-               <p:outputLabel value="#{buscarPacienteMB.clienteSelecionado.cli_CPF}"
-                              styleClass="outputLabel" />
+               <p:inplace effectSpeed="fast" event="dblclick">
+                  <p:inputText value="#{buscarPacienteMB.clienteSelecionado.cli_CPF}"
+                               styleClass="outputLabel" />
+               </p:inplace>
+
                <p:outputLabel value="RG :" />
-               <p:outputLabel value="#{buscarPacienteMB.clienteSelecionado.cli_RG}"
-                              styleClass="outputLabel" />
+               <p:inplace effectSpeed="fast" event="dblclick">
+                  <p:inputText value="#{buscarPacienteMB.clienteSelecionado.cli_RG}"
+                               styleClass="outputLabel" />
+               </p:inplace>
+
                <p:outputLabel value="Nome :" />
-               <p:outputLabel value="#{buscarPacienteMB.clienteSelecionado.cli_nome}"
-                              styleClass="outputLabel" />
+               <p:inplace effectSpeed="fast" event="dblclick">
+                  <p:inputText value="#{buscarPacienteMB.clienteSelecionado.cli_nome}"
+                               styleClass="outputLabel" />
+               </p:inplace>
+
                <p:outputLabel value="Nome da mãe :" />
-               <p:outputLabel value="#{buscarPacienteMB.clienteSelecionado.cli_nomedamae}"
-                              styleClass="outputLabel" />
+               <p:inplace effectSpeed="fast" event="dblclick">
+                  <p:inputText value="#{buscarPacienteMB.clienteSelecionado.cli_nomedamae}"
+                               styleClass="outputLabel" />
+               </p:inplace>
+
                <p:outputLabel value="Nome do pai :" />
-               <p:outputLabel value="#{buscarPacienteMB.clienteSelecionado.cli_nomedopai}"
-                              styleClass="outputLabel" />
+               <p:inplace effectSpeed="fast" event="dblclick">
+                  <p:inputText value="#{buscarPacienteMB.clienteSelecionado.cli_nomedopai}"
+                               styleClass="outputLabel" />
+               </p:inplace>
+
                <p:outputLabel value="Data de Nascimento:" />
-               <p:outputLabel value="#{buscarPacienteMB.dataConvertida}"
-                              styleClass="outputLabel" />
+               <p:inplace effectSpeed="fast" event="dblclick">
+                  <p:inputText value="#{buscarPacienteMB.dataConvertida}"
+                               styleClass="outputLabel" />
+               </p:inplace>
+
                <p:outputLabel value="Sexo :" />
-               <p:outputLabel value="#{buscarPacienteMB.clienteSelecionado.cli_sexo}"
-                              styleClass="outputLabel" />
+               <p:inplace effectSpeed="fast" event="dblclick">
+                  <p:inputText value="#{buscarPacienteMB.clienteSelecionado.cli_sexo}"
+                               styleClass="outputLabel" />
+               </p:inplace>
+
                <p:outputLabel value="Cor :" />
-               <p:outputLabel value="#{buscarPacienteMB.clienteSelecionado.cli_cor}"
-                              styleClass="outputLabel" />
+               <p:inplace effectSpeed="fast" event="dblclick">
+                  <p:inputText value="#{buscarPacienteMB.clienteSelecionado.cli_cor}"
+                               styleClass="outputLabel" />
+               </p:inplace>
+
                <p:outputLabel value="Telefone :" />
-               <p:outputLabel
-                  value="#{buscarPacienteMB.clienteSelecionado.cli_telefone}"
-                  styleClass="outputLabel" />
+               <p:inplace effectSpeed="fast" event="dblclick">
+                  <p:inputText
+                     value="#{buscarPacienteMB.clienteSelecionado.cli_telefone}"
+                     styleClass="outputLabel" />
+               </p:inplace>
+
                <p:outputLabel value="Cidade / UF :" />
-               <p:outputLabel
-                  value="#{buscarPacienteMB.clienteSelecionado.cli_log_id.log_bairro_id.cidade.cidadeDescricao} - 
-                  #{buscarPacienteMB.clienteSelecionado.cli_log_id.log_bairro_id.cidade.estado}"
-                  styleClass="outputLabel" />
+               <p:inplace effectSpeed="fast" event="dblclick">
+                  <p:inputText
+                     value="#{buscarPacienteMB.clienteSelecionado.cli_log_id.log_bairro_id.cidade.cidadeDescricao} - 
+                     #{buscarPacienteMB.clienteSelecionado.cli_log_id.log_bairro_id.cidade.estado}"
+                     styleClass="outputLabel" />
+               </p:inplace>
+
                <p:outputLabel value="Bairro :" />
-               <p:outputLabel value="#{buscarPacienteMB.clienteSelecionado.cli_log_id.log_bairro_id.bai_descricao}"
-                              styleClass="outputLabel" />
+               <p:inplace effectSpeed="fast" event="dblclick">
+                  <p:inputText value="#{buscarPacienteMB.clienteSelecionado.cli_log_id.log_bairro_id.bai_descricao}"
+                               styleClass="outputLabel" />
+               </p:inplace>
+
                <p:outputLabel value="Logradouro :" />
-               <p:outputLabel
-                  value="#{buscarPacienteMB.clienteSelecionado.cli_log_id.log_descricao}, #{buscarPacienteMB.clienteSelecionado.cli_numeroResidencial}"
-                  styleClass="outputLabel" />
+               <p:inplace effectSpeed="fast" event="dblclick">
+                  <p:inputText
+                     value="#{buscarPacienteMB.clienteSelecionado.cli_log_id.log_descricao}, #{buscarPacienteMB.clienteSelecionado.cli_numeroResidencial}"
+                     styleClass="outputLabel" />
+               </p:inplace>
+
                <p:outputLabel value="Unidade Pertencente :" />
-               <p:outputLabel
-                  value="#{buscarPacienteMB.prontuario.unidade.local_Descricao}"
-                  styleClass="outputLabel" />
+               <p:inplace effectSpeed="fast" event="dblclick">
+                  <p:inputText
+                     value="#{buscarPacienteMB.prontuario.unidade.local_Descricao}"
+                     styleClass="outputLabel" />
+               </p:inplace>
+
                <p:outputLabel value="Prontuario :" />
-               <p:outputLabel
-                  value="#{buscarPacienteMB.prontuario.pront_numeracao}"
-                  styleClass="outputLabel" />
+               <p:inplace effectSpeed="fast" event="dblclick">
+                  <p:inputText
+                     value="#{buscarPacienteMB.prontuario.pront_numeracao}"
+                     styleClass="outputLabel" />
+               </p:inplace>
+
             </p:panelGrid>    
             <p:commandButton value="Atualizar"/>
          </p:dialog>
