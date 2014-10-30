@@ -13,7 +13,7 @@
 		<security:intercept-url pattern="/faces/pages/controller/**"
 			access="hasAnyRole('ROLE_ESCRITURARIO','ROLE_GERENTE')" />
 
-		<security:form-login login-page="/faces/pages/login.xhtml"
+		<security:form-login login-page="/faces/pages/login.xthml"
 			authentication-failure-url="/faces/pages/login.xhtml?erro=true"
 			default-target-url="/faces/pages/controller/loginEfetuado.xhtml" />
 	</security:http>
