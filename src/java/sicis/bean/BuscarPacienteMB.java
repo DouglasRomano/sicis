@@ -36,6 +36,8 @@ public class BuscarPacienteMB implements Serializable {
    private Manipulador manipulador;
    private GenericDAO genericDAO;
 
+   String teste;
+   
    private transient FacesContext facesContext;
    private transient RequestContext requestContext;
 
@@ -44,24 +46,29 @@ public class BuscarPacienteMB implements Serializable {
 
       cliente = new Cliente();
       prontuario = new Prontuario();
+
+      teste = new String();
       
       manipulador = new Manipulador();
       genericDAO = new GenericDAO();
    }
-   
-   public void restartObjetos(){
+
+   public void restartObjetos() {
       dataConvertida = null;
       listCliente = null;
       cliente = new Cliente();
       clienteSelecionado = null;
       prontuario = new Prontuario();
    }
+
+   public void testar(){
+      System.out.println(teste);
+   }
    
-   public void selecionarPacienteDT(){
-      if(clienteSelecionado == null){
+   public void selecionarPacienteDT() {
+      if (clienteSelecionado == null) {
          clienteSelecionado = prontuario.getCliente();
-      }
-      else if(prontuario.getPront_id() == null){
+      } else if (prontuario.getPront_id() == null) {
          prontuario.setCliente(clienteSelecionado);
          searchPacientebyProntuario();
       }
@@ -69,10 +76,9 @@ public class BuscarPacienteMB implements Serializable {
    }
 
    private void exibirData() {
-         dataConvertida = manipulador.padronizarData(clienteSelecionado.getCli_nasc());
+      dataConvertida = manipulador.padronizarData(clienteSelecionado.getCli_nasc());
 
    }
-   
 
    public void searchPacientebyDocs() {
       facesContext = FacesContext.getCurrentInstance();
@@ -93,7 +99,7 @@ public class BuscarPacienteMB implements Serializable {
             requestContext.execute("PF('dialogPaciente').show();");
          } else {
             this.listCliente = listCliente;
-            requestContext.execute("PF('dialogTable').show();");            
+            requestContext.execute("PF('dialogTable').show();");
          }
       } catch (Exception ex) {
          Logger.getLogger(BuscarPacienteMB.class.getName()).log(Level.SEVERE, null, ex);
@@ -116,7 +122,7 @@ public class BuscarPacienteMB implements Serializable {
             requestContext.execute("PF('dialogPaciente').show();");
          } else {
             listCliente = new ArrayList<>();
-            for (Prontuario newProntuario : listProntuario) {               
+            for (Prontuario newProntuario : listProntuario) {
                listCliente.add(newProntuario.getCliente());
             }
             requestContext.execute("PF('dialogTable').show();");
@@ -148,7 +154,7 @@ public class BuscarPacienteMB implements Serializable {
    }
 
    public void setClienteSelecionado(Cliente clienteSelecionado) {
-      this.clienteSelecionado = clienteSelecionado;      
+      this.clienteSelecionado = clienteSelecionado;
    }
 
    public List<Cliente> getListCliente() {
@@ -165,6 +171,14 @@ public class BuscarPacienteMB implements Serializable {
 
    public void setDataConvertida(String dataConvertida) {
       this.dataConvertida = dataConvertida;
+   }
+
+   public String getTeste() {
+      return teste;
+   }
+
+   public void setTeste(String teste) {
+      this.teste = teste;
    }
 
 }
