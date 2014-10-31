@@ -17,7 +17,7 @@
 
          <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false"
                    resizable="false" showHeader="false">           
-            <p:graphicImage value="../../resources/loading.gif" />
+            <p:graphicImage value="/resources/loading.gif" />
          </p:dialog>
 
                <p:growl id="mensagens" showDetail="true" sticky="true"/>
@@ -36,9 +36,7 @@
                            <p:inputMask mask="#{novoProfissionalMB.selecionarMask()}" value="#{novoProfissionalMB.parametroValor}" 
                                         id="inputMaskDoc" disabled="#{empty novoProfissionalMB.parametroBusca}">
                               <p:ajax event="blur" listener="#{novoProfissionalMB.searchCliente()}" 
-                                      update="mensagens"/>
-                              <p:ajax event="blur" listener="#{novoProfissionalMB.ajustarData()}"
-                                      update="labelNomeCliente,labelDataNasc,labelNomeMae"/>
+                                      update="mensagens,labelNomeCliente,labelDataNasc,labelNomeMae"/>
                            </p:inputMask>
                            <p:outputLabel value="Cargo :"/>
                            <p:inputText value="#{novoProfissionalMB.profissional.pro_cargo}"/>
@@ -48,7 +46,9 @@
                            <p:outputLabel value="Nome"/>
                            <p:outputLabel value="#{novoProfissionalMB.cliente.cli_nome}" id="labelNomeCliente"/>
                            <p:outputLabel value="Data de Nascimento"/>
-                           <p:outputLabel value="#{novoProfissionalMB.dataConvertida}" id="labelDataNasc"/>
+                           <p:outputLabel value="#{novoProfissionalMB.cliente.cli_nasc}" id="labelDataNasc">
+                           <f:convertDateTime pattern="dd/MM/yyyy"/>        
+                           </p:outputLabel>
                            <p:outputLabel value="Nome da Mãe"/>
                            <p:outputLabel value="#{novoProfissionalMB.cliente.cli_nomedamae}" id="labelNomeMae"/>
                         </p:panelGrid>

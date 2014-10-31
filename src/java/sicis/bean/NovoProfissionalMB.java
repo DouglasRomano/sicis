@@ -27,7 +27,7 @@ public class NovoProfissionalMB implements Serializable{
     
     private String parametroBusca;
     private String parametroValor;
-    private String dataConvertida;
+  
     private Unidade unidadeSelecionada;
     private Permissao permissaoSelecionada;
     
@@ -52,12 +52,7 @@ public class NovoProfissionalMB implements Serializable{
     public String selecionarMask(){
         return manipulador.selectMask(parametroBusca);
     }
-    
-    public void ajustarData(){
-        dataConvertida = manipulador.padronizarData(cliente.getCli_nasc());
-            
-    }
-    
+      
     public void searchCliente(){
         facesContext = FacesContext.getCurrentInstance();        
         
@@ -120,14 +115,6 @@ public class NovoProfissionalMB implements Serializable{
 
     public void setParametroValor(String parametroValor) {
         this.parametroValor = parametroValor;
-    }
-
-    public String getDataConvertida() {
-        return dataConvertida;
-    }
-
-    public void setDataConvertida(String dataConvertida) {
-        this.dataConvertida = dataConvertida;
     }
 
     public Unidade getUnidadeSelecionada() {

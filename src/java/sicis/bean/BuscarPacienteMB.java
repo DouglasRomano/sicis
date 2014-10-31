@@ -16,7 +16,6 @@ import sicis.dao.GenericDAO;
 
 import sicis.domain.Cliente;
 import sicis.domain.Prontuario;
-import sicis.manipuladores.Manipulador;
 
 @ManagedBean
 @ViewScoped
@@ -27,17 +26,14 @@ public class BuscarPacienteMB implements Serializable {
    private Cliente cliente;
    private Prontuario prontuario;
 
-   private String dataConvertida;
-
    private List<Cliente> listCliente;
    private List<Prontuario> listProntuario;
    private Cliente clienteSelecionado;
 
-   private Manipulador manipulador;
+   public boolean renderizarUpdate;
+   
    private GenericDAO genericDAO;
 
-   String teste;
-   
    private transient FacesContext facesContext;
    private transient RequestContext requestContext;
 
@@ -47,24 +43,22 @@ public class BuscarPacienteMB implements Serializable {
       cliente = new Cliente();
       prontuario = new Prontuario();
 
-      teste = new String();
+      renderizarUpdate = false;
       
-      manipulador = new Manipulador();
       genericDAO = new GenericDAO();
+   }
+   
+   public void renderUpdate(){
+      renderizarUpdate = true;
    }
 
    public void restartObjetos() {
-      dataConvertida = null;
       listCliente = null;
       cliente = new Cliente();
       clienteSelecionado = null;
       prontuario = new Prontuario();
    }
 
-   public void testar(){
-      System.out.println(teste);
-   }
-   
    public void selecionarPacienteDT() {
       if (clienteSelecionado == null) {
          clienteSelecionado = prontuario.getCliente();
@@ -72,12 +66,7 @@ public class BuscarPacienteMB implements Serializable {
          prontuario.setCliente(clienteSelecionado);
          searchPacientebyProntuario();
       }
-      exibirData();
-   }
-
-   private void exibirData() {
-      dataConvertida = manipulador.padronizarData(clienteSelecionado.getCli_nasc());
-
+     
    }
 
    public void searchPacientebyDocs() {
@@ -95,7 +84,6 @@ public class BuscarPacienteMB implements Serializable {
             clienteSelecionado = listCliente.get(0);
             prontuario.setCliente(clienteSelecionado);
             searchPacientebyProntuario();
-            exibirData();
             requestContext.execute("PF('dialogPaciente').show();");
          } else {
             this.listCliente = listCliente;
@@ -118,7 +106,6 @@ public class BuscarPacienteMB implements Serializable {
          } else if (listProntuario.size() == 1) {
             prontuario = listProntuario.get(0);
             clienteSelecionado = prontuario.getCliente();
-            exibirData();
             requestContext.execute("PF('dialogPaciente').show();");
          } else {
             listCliente = new ArrayList<>();
@@ -132,6 +119,22 @@ public class BuscarPacienteMB implements Serializable {
       }
    }
 
+   public void updatePaciente(){
+      facesContext = FacesContext.getCurrentInstance();
+      try {
+         genericDAO.update(clienteSelecionado);
+         genericDAO.update(prontuario);
+         facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,"Atualizado!", "Paciente salvo com sucesso"));
+      } catch (Exception ex) {
+         Logger.getLogger(BuscarPacienteMB.class.getName()).log(Level.SEVERE, null, ex);
+      }
+      
+   }
+   
+   public void deletePaciente(){
+      
+   }
+   
    // getters and setters
    public Cliente getCliente() {
       return cliente;
@@ -163,22 +166,14 @@ public class BuscarPacienteMB implements Serializable {
 
    public void setListCliente(List<Cliente> listCliente) {
       this.listCliente = listCliente;
+   }  
+
+   public boolean isRenderizarUpdate() {
+      return renderizarUpdate;
    }
 
-   public String getDataConvertida() {
-      return dataConvertida;
+   public void setRenderizarUpdate(boolean renderizarUpdate) {
+      this.renderizarUpdate = renderizarUpdate;
    }
-
-   public void setDataConvertida(String dataConvertida) {
-      this.dataConvertida = dataConvertida;
-   }
-
-   public String getTeste() {
-      return teste;
-   }
-
-   public void setTeste(String teste) {
-      this.teste = teste;
-   }
-
+   
 }

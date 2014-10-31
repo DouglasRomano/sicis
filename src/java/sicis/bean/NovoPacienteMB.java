@@ -32,8 +32,6 @@ public class NovoPacienteMB implements Serializable {
    private Prontuario prontuario;
    private Unidade unidade;
 
-   private String dataConvertida;
-
    private String opcaoHeader;
    private Logradouro logSelecionado;
    private List<Logradouro> listaLogradouro;
@@ -55,11 +53,6 @@ public class NovoPacienteMB implements Serializable {
       opcaoHeader = new String();
       manipulador = new Manipulador();
       genericDAO = new GenericDAO();
-   }
-
-   public void ajustarData() {
-
-      dataConvertida = manipulador.padronizarData(cliente.getCli_nasc());
    }
 
    public String ajustarHeader() {
@@ -270,15 +263,6 @@ public class NovoPacienteMB implements Serializable {
 
    public void setCliente(Cliente cliente) {
       this.cliente = cliente;
-   }
-
-
-   public String getDataConvertida() {
-      return dataConvertida;
-   }
-
-   public void setDataConvertida(String dataConvertida) {
-      this.dataConvertida = dataConvertida;
    }
 
    public Logradouro getLogSelecionado() {

@@ -17,7 +17,7 @@
 
             <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false"
                       resizable="false" showHeader="false">           
-               <p:graphicImage value="../../resources/loading.gif" />
+               <p:graphicImage value="/resources/loading.gif" />
             </p:dialog>
 
             <p:growl id="mensagens" showDetail="true" sticky="true" />
@@ -84,7 +84,6 @@
                         <p:outputLabel value="Data de Nascimento :" />
                         <p:calendar navigator="true" mask="true" pattern="dd/MM/yyyy"
                                     value="#{novoPacienteMB.cliente.cli_nasc}">
-                           <p:ajax event="blur" listener="#{novoPacienteMB.ajustarData()}" />
                         </p:calendar>
                         <p:outputLabel value="Sexo :" />
                         <p:selectOneRadio id="selectSexo"
@@ -178,8 +177,10 @@
                      <p:outputLabel value="#{novoPacienteMB.cliente.cli_nomedopai}"
                                     styleClass="outputLabel" />
                      <p:outputLabel value="Data de Nascimento:" />
-                     <p:outputLabel value="#{novoPacienteMB.dataConvertida}"
-                                    styleClass="outputLabel" />
+                     <p:outputLabel value="#{novoPacienteMB.cliente.cli_nasc}"
+                                    styleClass="outputLabel">
+                        <f:convertDateTime pattern="dd/MM/yyyy"/>
+                     </p:outputLabel>
                      <p:outputLabel value="Sexo :" />
                      <p:outputLabel value="#{novoPacienteMB.cliente.cli_sexo}"
                                     styleClass="outputLabel" />

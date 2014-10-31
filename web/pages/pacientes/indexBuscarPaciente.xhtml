@@ -17,7 +17,7 @@
 
          <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false"
                    resizable="false" showHeader="false">           
-            <p:graphicImage value="../../resources/loading.gif" />
+            <p:graphicImage value="/resources/loading.gif" />
          </p:dialog>
 
          <div align="center">
@@ -88,70 +88,82 @@
                <p:panelGrid columns="2" columnClasses="label,value">
 
                   <p:outputLabel value="Número do CNS :" />
-                  <p:inplace widgetVar="widgetLabel">
+                  <p:inplace effectSpeed="fast" event="dblclick" editor="true">
+                     <p:ajax event="save" update="btnUpdate" listener="#{buscarPacienteMB.renderUpdate()}" /> 
                      <p:inputMask id="mask" mask="999.9999.9999.9999" 
-                                  value="#{buscarPacienteMB.clienteSelecionado.cli_CNS}">
-                        <p:ajax event="blur" update="@parent" oncomplete="widgetLabel.hide()"/>
+                                  value="#{buscarPacienteMB.clienteSelecionado.cli_CNS}">                        
                      </p:inputMask>
                   </p:inplace>
 
                   <p:outputLabel value="CPF :" />
-                  <p:inplace effectSpeed="fast" event="dblclick">
+                  <p:inplace effectSpeed="fast" event="dblclick" editor="true">
+                     <p:ajax event="save" update="btnUpdate" listener="#{buscarPacienteMB.renderUpdate()}" /> 
                      <p:inputMask mask="999.999.999-99" value="#{buscarPacienteMB.clienteSelecionado.cli_CPF}"
                                   styleClass="outputLabel" />
                   </p:inplace>
 
                   <p:outputLabel value="RG :" />
-                  <p:inplace effectSpeed="fast" event="dblclick">
+                  <p:inplace effectSpeed="fast" event="dblclick" editor="true">
+                     <p:ajax event="save" update="btnUpdate" listener="#{buscarPacienteMB.renderUpdate()}" /> 
                      <p:inputText value="#{buscarPacienteMB.clienteSelecionado.cli_RG}"
                                   styleClass="outputLabel" />
                   </p:inplace>
 
                   <p:outputLabel value="Nome :" />
-                  <p:inplace effectSpeed="fast" event="dblclick">
+                  <p:inplace effectSpeed="fast" event="dblclick" editor="true">
+                     <p:ajax event="save" update="btnUpdate" listener="#{buscarPacienteMB.renderUpdate()}" /> 
                      <p:inputText value="#{buscarPacienteMB.clienteSelecionado.cli_nome}"
                                   styleClass="outputLabel" />
                   </p:inplace>
 
                   <p:outputLabel value="Nome da mãe :" />
-                  <p:inplace effectSpeed="fast" event="dblclick">
+                 <p:inplace effectSpeed="fast" event="dblclick" editor="true">
+                     <p:ajax event="save" update="btnUpdate" listener="#{buscarPacienteMB.renderUpdate()}" /> 
                      <p:inputText value="#{buscarPacienteMB.clienteSelecionado.cli_nomedamae}"
                                   styleClass="outputLabel" />
                   </p:inplace>
 
                   <p:outputLabel value="Nome do pai :" />
-                  <p:inplace effectSpeed="fast" event="dblclick">
+                 <p:inplace effectSpeed="fast" event="dblclick" editor="true">
+                     <p:ajax event="save" update="btnUpdate" listener="#{buscarPacienteMB.renderUpdate()}" /> 
                      <p:inputText value="#{buscarPacienteMB.clienteSelecionado.cli_nomedopai}"
                                   styleClass="outputLabel" />
                   </p:inplace>
 
                   <p:outputLabel value="Data de Nascimento:" />
-                  <p:inplace effectSpeed="fast" event="dblclick">
-                     <p:inputText value="#{buscarPacienteMB.dataConvertida}"
-                                  styleClass="outputLabel" />
+                  <p:inplace effectSpeed="fast" event="dblclick" editor="true">
+                     <p:ajax event="save" update="btnUpdate" listener="#{buscarPacienteMB.renderUpdate()}" /> 
+                     <p:inputMask mask="99/99/9999" value="#{buscarPacienteMB.clienteSelecionado.cli_nasc}"
+                                  styleClass="outputLabel">
+                        <f:convertDateTime pattern="dd/MM/yyyy"/>
+                     </p:inputMask>
                   </p:inplace>
 
                   <p:outputLabel value="Sexo :" />
-                  <p:inplace effectSpeed="fast" event="dblclick">
+                  <p:inplace effectSpeed="fast" event="dblclick" editor="true">
+                     <p:ajax event="save" update="btnUpdate" listener="#{buscarPacienteMB.renderUpdate()}" /> 
                      <p:inputText value="#{buscarPacienteMB.clienteSelecionado.cli_sexo}"
                                   styleClass="outputLabel" />
                   </p:inplace>
 
                   <p:outputLabel value="Cor :" />
-                  <p:inplace effectSpeed="fast" event="dblclick">
+                  <p:inplace effectSpeed="fast" event="dblclick" editor="true">
+                     <p:ajax event="save" update="btnUpdate" listener="#{buscarPacienteMB.renderUpdate()}" /> 
                      <p:inputText value="#{buscarPacienteMB.clienteSelecionado.cli_cor}"
                                   styleClass="outputLabel" />
                   </p:inplace>
 
                   <p:outputLabel value="Telefone :" />
-                  <p:inplace effectSpeed="fast" event="dblclick">
+                 <p:inplace effectSpeed="fast" event="dblclick" editor="true">
+                     <p:ajax event="save" update="btnUpdate" listener="#{buscarPacienteMB.renderUpdate()}" /> 
                      <p:inputMask mask="(99) 99999-9999"
                                   value="#{buscarPacienteMB.clienteSelecionado.cli_telefone}"
                                   styleClass="outputLabel" />
                   </p:inplace>
 
                   <p:outputLabel value="Cidade / UF :" />
-                  <p:inplace effectSpeed="fast" event="dblclick">
+                 <p:inplace effectSpeed="fast" event="dblclick" editor="true">
+                     <p:ajax event="save" update="btnUpdate" listener="#{buscarPacienteMB.renderUpdate()}" /> 
                      <p:inputText
                         value="#{buscarPacienteMB.clienteSelecionado.cli_log_id.log_bairro_id.cidade.cidadeDescricao} - 
                         #{buscarPacienteMB.clienteSelecionado.cli_log_id.log_bairro_id.cidade.estado}"
@@ -159,33 +171,43 @@
                   </p:inplace>
 
                   <p:outputLabel value="Bairro :" />
-                  <p:inplace effectSpeed="fast" event="dblclick">
+                  <p:inplace effectSpeed="fast" event="dblclick" editor="true">
+                     <p:ajax event="save" update="btnUpdate" listener="#{buscarPacienteMB.renderUpdate()}" /> 
                      <p:inputText value="#{buscarPacienteMB.clienteSelecionado.cli_log_id.log_bairro_id.bai_descricao}"
                                   styleClass="outputLabel" />
                   </p:inplace>
 
                   <p:outputLabel value="Logradouro :" />
-                  <p:inplace effectSpeed="fast" event="dblclick">
+                  <p:inplace effectSpeed="fast" event="dblclick" editor="true">
+                     <p:ajax event="save" update="btnUpdate" listener="#{buscarPacienteMB.renderUpdate()}" /> 
                      <p:inputText
                         value="#{buscarPacienteMB.clienteSelecionado.cli_log_id.log_descricao}, #{buscarPacienteMB.clienteSelecionado.cli_numeroResidencial}"
                         styleClass="outputLabel" />
                   </p:inplace>
 
                   <p:outputLabel value="Unidade Pertencente :" />
-                  <p:inplace effectSpeed="fast" event="dblclick">
+                 <p:inplace effectSpeed="fast" event="dblclick" editor="true">
+                     <p:ajax event="save" update="btnUpdate" listener="#{buscarPacienteMB.renderUpdate()}" /> 
                      <p:inputText
                         value="#{buscarPacienteMB.prontuario.unidade.local_Descricao}"
                         styleClass="outputLabel" />
                   </p:inplace>
 
                   <p:outputLabel value="Prontuario :" />
-                  <p:inplace effectSpeed="fast" event="dblclick">
+                  <p:inplace effectSpeed="fast" event="dblclick" editor="true">
+                     <p:ajax event="save" update="btnUpdate" listener="#{buscarPacienteMB.renderUpdate()}" /> 
                      <p:inputText
                         value="#{buscarPacienteMB.prontuario.pront_numeracao}"
                         styleClass="outputLabel" />
-                  </p:inplace>            
+                  </p:inplace>   
+
                </p:panelGrid>    
-               <p:commandButton value="Atualizar"/>
+               <p:commandButton disabled="#{!buscarPacienteMB.renderizarUpdate}" id="btnUpdate" 
+                                value="Salvar" actionListener="#{buscarPacienteMB.updatePaciente()}"
+                                oncomplete="PF('dialogPaciente').hide();"/>
+               <p:commandButton value="Deletar"/>
+               <p:commandButton value="Agendar Exame"/>
+               <p:commandButton value="Agendar Consulta"/>
             </h:form>
          </p:dialog>
 
