@@ -10,6 +10,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import org.hibernate.exception.ConstraintViolationException;
 
 import sicis.dao.GenericDAO;
 import sicis.domain.DescricaoExames;
@@ -50,6 +51,8 @@ public class ExamesCadastradosMB implements Serializable {
       try {
          genericDAO.save(descricaoExames);
          facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Salvo com sucesso", "Exame Cadastrado com Sucesso"));
+      } catch (ConstraintViolationException cve) {
+         facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Operação não realizada", "Já existe algum procedimento com essa numeração"));
       } catch (Exception ex) {
          Logger.getLogger(UnidadeMB.class.getName()).log(Level.SEVERE, null, ex);
       }

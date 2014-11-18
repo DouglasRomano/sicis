@@ -73,7 +73,8 @@ public class NovoPacienteMB implements Serializable {
 
       List<Cidade> listCidade;
       try {
-         listCidade = genericDAO.searchObject(Cidade.class,
+         listCidade = genericDAO.searchObject(Cidade.class,"cidade",
+                 null, null,
                  new String[]{"cidadeDescricao", "estado"},
                  new Object[]{cidade.getCidadeDescricao(), cidade.getEstado()});
          if (listCidade.isEmpty()) {
@@ -101,7 +102,8 @@ public class NovoPacienteMB implements Serializable {
       List<Bairro> listBairro;
       try {
          bairro.setCidade(cidade);
-         listBairro = genericDAO.searchObject(Bairro.class,
+         listBairro = genericDAO.searchObject(Bairro.class,"bairro",
+                 null, null,
                  new String[]{"cidade", "bai_descricao"},
                  new Object[]{bairro.getCidade(), "%" + bairro.getBai_descricao() + "%"});
 
@@ -130,7 +132,8 @@ public class NovoPacienteMB implements Serializable {
       List<Logradouro> listLogradouro;
       try {
          logradouro.setLog_bairro_id(this.bairro);
-         listLogradouro = genericDAO.searchObject(Logradouro.class,
+         listLogradouro = genericDAO.searchObject(Logradouro.class,"logradouro",
+                 null, null,
                  new String[]{"log_bairro_id", "log_descricao"},
                  new Object[]{logradouro.getLog_bairro_id(), "%" + logradouro.getLog_descricao() + "%"});
 
@@ -157,7 +160,8 @@ public class NovoPacienteMB implements Serializable {
       requestContext = RequestContext.getCurrentInstance();
       logradouro.setLog_bairro_id(bairro);
       try {
-         listaLogradouro = genericDAO.searchObject(Logradouro.class,
+         listaLogradouro = genericDAO.searchObject(Logradouro.class,"logradouro",
+                 null, null,
                  new String[]{"log_bairro_id", "log_descricao"},
                  new Object[]{logradouro.getLog_bairro_id(), "%" + logradouro.getLog_descricao() + "%"});
          if (listaLogradouro.size() == 1) {
@@ -183,7 +187,8 @@ public class NovoPacienteMB implements Serializable {
       List<Cliente> listCliente;
 
       try {
-         listCliente = genericDAO.searchObject(Cliente.class, new String[]{"cli_CNS"}, new Object[]{cliente.getCli_CNS()});
+         listCliente = genericDAO.searchObject(Cliente.class,"cliente",
+                 null, null,new String[]{"cli_CNS"}, new Object[]{cliente.getCli_CNS()});
 
          cliente = listCliente.get(0);
 

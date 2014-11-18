@@ -1,0 +1,39 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+  <h:head>
+    <title>Buscar Solicitações</title>
+  </h:head>
+  <h:body>
+    <h:form id="formBuscarSolicitacao">
+
+      <p:growl autoUpdate="true" sticky="true" showDetail="true"/>
+      <center>
+        <p:panelGrid columns="2">
+
+          <p:outputLabel value="Número do Pedido"/>
+          <p:inputText value="#{buscarSolicitacaoMB.solicitacoes.solExa_Pedido}">
+            <p:ajax event="blur" update="@form"/>
+          </p:inputText>
+          <p:outputLabel value="Cartão SUS do paciente"/>
+          <p:inputText value="#{buscarSolicitacaoMB.cliente.cli_CNS}" disabled="#{not empty buscarSolicitacaoMB.solicitacoes.solExa_Pedido}"/>
+          <p:outputLabel value="Codigo do Procedimento"/>
+          <p:inputText value="#{buscarSolicitacaoMB.procedimentos.des_codigoProcedimento}" disabled="#{not empty buscarSolicitacaoMB.solicitacoes.solExa_Pedido}"/>
+          <p:outputLabel value="Profissional"/>
+          <p:inputText value="#{buscarSolicitacaoMB.nomeProfissional.cli_nome}" disabled="#{not empty buscarSolicitacaoMB.solicitacoes.solExa_Pedido}"/>
+
+        </p:panelGrid>
+
+        <p:commandButton value="Buscar" action="/pages/controller/agendamento/solicitacoesRealizadas.xhtml?faces-redirect=true"
+                         actionListener="#{buscarSolicitacaoMB.searchSolicitacoes()}">
+          <f:setPropertyActionListener target="#{enviarObjectMB.listSolicitacoes}"
+                                       value="#{buscarSolicitacaoMB.listaSolicitacoesExames}"/>
+        </p:commandButton>
+      </center>
+    </h:form>    
+  </h:body>
+</html>
+

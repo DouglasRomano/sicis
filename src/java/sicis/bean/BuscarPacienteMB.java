@@ -11,6 +11,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import org.hibernate.exception.ConstraintViolationException;
 import org.primefaces.context.RequestContext;
 import sicis.dao.GenericDAO;
 
@@ -75,7 +76,7 @@ public class BuscarPacienteMB implements Serializable {
 
       List<Cliente> listCliente;
       try {
-         listCliente = genericDAO.searchObject(Cliente.class,
+         listCliente = genericDAO.searchObject(Cliente.class,"cliente", null, null,
                  new String[]{"cli_nasc", "cli_CPF", "cli_CNS", "cli_nome", "cli_nomedamae"},
                  new Object[]{cliente.getCli_nasc(), cliente.getCli_CPF(), cliente.getCli_CNS(), cliente.getCli_nome(), cliente.getCli_nomedamae()});
          if (listCliente.isEmpty()) {
@@ -99,7 +100,8 @@ public class BuscarPacienteMB implements Serializable {
       requestContext = RequestContext.getCurrentInstance();
 
       try {
-         listProntuario = genericDAO.searchObject(Prontuario.class, new String[]{"cliente", "unidade", "pront_numeracao"},
+         listProntuario = genericDAO.searchObject(Prontuario.class,"prontuario",null, null,
+                 new String[]{"cliente", "unidade", "pront_numeracao"},
                  new Object[]{clienteSelecionado, prontuario.getUnidade(), prontuario.getPront_numeracao()});
          if (listProntuario.isEmpty()) {
             facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Alerta!", "Esse paciente não tem nenhum prontuario cadastrado"));
@@ -132,7 +134,18 @@ public class BuscarPacienteMB implements Serializable {
    }
    
    public void deletePaciente(){
+      facesContext = FacesContext.getCurrentInstance();
       
+      try {
+         genericDAO.delete(prontuario);
+         genericDAO.delete(clienteSelecionado);
+         facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,"Deletado!", "Paciente deletado com sucesso"));
+      } catch(ConstraintViolationException cve){
+         facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,"Essa operação não pode ser realizada", "Para removê-lo, é necessário remover seus registros primeiramente"));
+      }
+      catch (Exception ex) {
+         Logger.getLogger(BuscarPacienteMB.class.getName()).log(Level.SEVERE, null, ex);
+      }
    }
    
    // getters and setters

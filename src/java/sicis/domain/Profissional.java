@@ -8,82 +8,110 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
+import sicis.convert.BaseEntity;
 
 @Entity
-public class Profissional implements Serializable {
-   
-	private static final long serialVersionUID = 1L;
+public class Profissional implements BaseEntity, Serializable {
 
-	@GeneratedValue(strategy = GenerationType.AUTO)
-    @Id
-    private Long pro_id;
-    
-    @JoinColumn(name = "pro_cli_id")
-    @OneToOne
-    private Cliente cliente;
-    
-    @JoinColumn(name = "pro_localatendimento_id")
-    @ManyToOne
-    private Unidade unidade;
-    
-    @JoinColumn(name = "pro_permissoes_id")
-    @ManyToOne
-    private Permissao permissao;
-    
-    @Column
-    private String pro_cargo;
-    
-    @Column
-    private String pro_documentacao;
+  private static final long serialVersionUID = 1L;
 
-    public Long getPro_id() {
-        return pro_id;
-    }
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  @Id
+  private Long pro_id;
 
-    public void setPro_id(Long pro_id) {
-        this.pro_id = pro_id;
-    }
+  @JoinColumn(name = "pro_cli_id")
+  @ManyToOne
+  private Cliente cliente;
 
-    public Cliente getCliente() {
-        return cliente;
-    }
+  @JoinColumn(name = "pro_localatendimento_id")
+  @ManyToOne
+  private Unidade unidade;
 
-    public void setCliente(Cliente cliente) {
-        this.cliente = cliente;
-    }
+  @JoinColumn(name = "pro_permissoes_id")
+  @ManyToOne
+  private Permissao permissao;
 
-    public Unidade getUnidade() {
-        return unidade;
-    }
+  @Column
+  private String pro_cargo;
 
-    public void setUnidade(Unidade unidade) {
-        this.unidade = unidade;
-    }
+  @Column
+  private String pro_documentacao;
 
-    public Permissao getPermissao() {
-        return permissao;
-    }
+  @Column
+  private String pro_login;
 
-    public void setPermissao(Permissao permissao) {
-        this.permissao = permissao;
-    }
+  @Column
+  private String pro_senha;
 
-    public String getPro_cargo() {
-        return pro_cargo;
-    }
 
-    public void setPro_cargo(String pro_cargo) {
-        this.pro_cargo = pro_cargo;
-    }    
+  public Long getPro_id() {
+    return pro_id;
+  }
 
-    public String getPro_documentacao() {
-        return pro_documentacao;
-    }
+  public void setPro_id(Long pro_id) {
+    this.pro_id = pro_id;
+  }
 
-    public void setPro_documentacao(String pro_documentacao) {
-        this.pro_documentacao = pro_documentacao;
-    }
-    
-    
+  public Cliente getCliente() {
+    return cliente;
+  }
+
+  public void setCliente(Cliente cliente) {
+    this.cliente = cliente;
+  }
+
+  public Unidade getUnidade() {
+    return unidade;
+  }
+
+  public void setUnidade(Unidade unidade) {
+    this.unidade = unidade;
+  }
+
+  public Permissao getPermissao() {
+    return permissao;
+  }
+
+  public void setPermissao(Permissao permissao) {
+    this.permissao = permissao;
+  }
+
+  public String getPro_cargo() {
+    return pro_cargo;
+  }
+
+  public void setPro_cargo(String pro_cargo) {
+    this.pro_cargo = pro_cargo;
+  }
+
+  public String getPro_documentacao() {
+    return pro_documentacao;
+  }
+
+  public void setPro_documentacao(String pro_documentacao) {
+    this.pro_documentacao = pro_documentacao;
+  }
+
+  public String getPro_senha() {
+    return pro_senha;
+  }
+
+  public void setPro_senha(String pro_senha) {
+    this.pro_senha = pro_senha;
+  }
+
+  public String getPro_login() {
+    return pro_login;
+  }
+
+  public void setPro_login(String pro_login) {
+    this.pro_login = pro_login;
+  }
+  
+
+  @Override
+  public Long getId() {
+    return pro_id;
+  }
+
 }

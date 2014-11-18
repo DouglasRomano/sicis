@@ -18,6 +18,18 @@
 .semborda{
    border:none!important;
 }
+
+.styleSizeDatatable{
+   max-width: 70%;
+   max-height: 5%;
+}
+
+.borderForms{
+   border-width: medium;
+   border-style: solid;
+   border-color: black;
+}
+
 .styleBotoes{
    font-size: 15px !important;
    height:50px;
@@ -27,8 +39,4 @@
 .noborderTable tr, .noborderTable td {  
    border: none !important;  
 }  
-.borderForms{
-   border-width: medium;
-   border-style: solid;
-   border-color: black;
-}
+

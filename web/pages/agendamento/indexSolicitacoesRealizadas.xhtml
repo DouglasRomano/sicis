@@ -1,0 +1,77 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+  <h:head>
+    <title>Solicitações Realizadas</title>
+    <h:outputStylesheet library="css" name="modelo.css" />
+  </h:head>
+  <h:body>
+    <h:form id="formDataTable">
+      <p:dataTable id="tbl" var="solicitacoes" 
+                   rowKey="#{solicitacoes.solExa_id}"
+                   value="#{solicitacoesRealizadasMB.listaSolicitacoes}"
+                   emptyMessage="Não foi informado nenhuma solicitação"
+                   paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {Exporters}" 
+                   paginator="true" rows="10" 
+                   style="margin-bottom:20px">
+
+        <p:column>
+          <f:facet name="header">
+            <h:outputText value="Numero do Pedido" />
+          </f:facet>
+          <h:outputText value="#{solicitacoes.solExa_Pedido}" />
+        </p:column>      
+
+        <p:column>
+          <f:facet name="header">
+            <h:outputText value="Paciente" />
+          </f:facet>
+          <h:outputText value="#{solicitacoes.solicitacao.cliente.cli_nome}" />
+        </p:column>  
+
+        <p:column>
+          <f:facet name="header">
+            <h:outputText value="Solicitante" />
+          </f:facet>
+          <h:outputText value="#{solicitacoes.solicitacao.profissionalPedido.cliente.cli_nome}" />
+        </p:column>  
+
+        <p:column>
+          <f:facet name="header">
+            <h:outputText value="Data do Pedido" />
+          </f:facet>
+          <h:outputText value="#{solicitacoes.solicitacao.sol_datePedido}">
+            <f:convertDateTime pattern="dd/MM/yyyy"/>
+          </h:outputText>
+        </p:column>  
+
+        <p:column>
+          <f:facet name="header">
+            <h:outputText value="Procedimento" />
+          </f:facet>
+          <h:outputText value="#{solicitacoes.descricaoExames.des_nomeexame}" />
+        </p:column>  
+
+        <p:column>
+          <f:facet name="header">
+            <h:outputText value="Status" />
+          </f:facet>
+          <h:outputText value="#{solicitacoes.solicitacao.sol_status}" />
+        </p:column>  
+
+        <f:facet name="footer">  
+          <h:commandLink >  
+            <h:graphicImage value="/resources/images/icones/pdfIcon.png" width="24"/>            
+            <p:dataExporter type="pdf" target="tbl" fileName="Solicitacoes" />
+          </h:commandLink> 
+
+        </f:facet>  
+
+      </p:dataTable>         
+    </h:form>
+  </h:body>
+</html>
+

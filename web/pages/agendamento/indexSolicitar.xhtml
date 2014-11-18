@@ -1,0 +1,137 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+  <h:head>
+    <title>Agendamento</title>
+    <h:outputStylesheet library="css" name="modelo.css" />
+    <h:outputScript library="js" name="configPrimefaces.js"/>
+  </h:head>
+  <h:body>
+    <h:form id="formInput">
+      <p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" />
+
+      <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" 
+                resizable="false" showHeader="false" appendTo="@(body)">
+        <p:graphicImage name="/resources/images/icones/loading.gif" />
+      </p:dialog>
+
+      <p:growl id="mensagens" autoUpdate="true" showDetail="true" sticky="true"/> 
+
+      <div align="center">
+        <p:panelGrid columns="2">
+          <p:outputLabel value="CNS"/>
+          <p:inputMask id="inputMaskCNS" mask="999.9999.9999.9999" value="#{solicitacoesMB.cliente.cli_CNS}">
+            <p:ajax event="blur" listener="#{solicitacoesMB.searchPaciente()}" update="@form"/>
+          </p:inputMask>
+          <p:outputLabel value="Nome :"/>
+          <p:outputLabel value="#{solicitacoesMB.clienteSelecionado.cli_nome}"/>
+          <p:outputLabel value="Data de Nascimento :"/>
+          <p:outputLabel value="#{solicitacoesMB.clienteSelecionado.cli_nasc}">
+            <f:convertDateTime pattern="dd/MM/yyyy"/>
+          </p:outputLabel>
+          <p:outputLabel value="CPF :"/>
+          <p:outputLabel value="#{solicitacoesMB.clienteSelecionado.cli_CPF}"/>
+          <p:outputLabel value="RG :"/>
+          <p:outputLabel value="#{solicitacoesMB.clienteSelecionado.cli_RG}"/>
+          <p:outputLabel value="Fone :"/>
+          <p:outputLabel value="#{solicitacoesMB.clienteSelecionado.cli_telefone}"/>
+          <p:outputLabel value="Mãe :"/>
+          <p:outputLabel value="#{solicitacoesMB.clienteSelecionado.cli_nomedamae}"/>
+        </p:panelGrid>
+
+        <!-- usar datalist -->
+        <p:panel styleClass="semborda">
+          <h:form id="formViewDataList" rendered="#{not empty solicitacoesMB.clienteSelecionado}">
+            <center>
+              <p:dataList value="#{solicitacoesMB.listDescricaoExames}" var="solicitacoes" id="dataListProcedimentos" 
+                          type="ordered" emptyMessage="Nenhum procedimento adicionado" styleClass="styleSizeDatatable">
+                <f:facet name="header">
+                  <p:spacer height="10" width="160"/>
+                  <h:outputText value="Solicitações realizadas"/>
+                  <p:spacer height="10" width="160"/>
+                  <p:commandButton actionListener="#{solicitacoesMB.criarNovoProcedimento()}" 
+                                   value="Novo" update=":dialogSolicitacoes"
+                                   oncomplete="PF('dialogSolicitacoes').show()"/>
+                </f:facet>
+                <f:facet name="footer">
+                  <h:outputText value="Total :"/>
+                  <h:outputText value="#{solicitacoesMB.somatoriaProcedimentos()}">
+                    <f:convertNumber minFractionDigits="2" type="currency"/>
+                  </h:outputText>
+                  <p align="center">
+                    <p:commandButton value="Salvar Solicitação" 
+                                     actionListener="#{solicitacoesMB.btnSalvarSolicitacao()}"
+                                     action="/pages/controller/agendamento/solicitacoesRealizadas.xhtml?faces-redirect=true">
+                      <f:setPropertyActionListener target="#{enviarObjectMB.listSolicitacoes}" value="#{solicitacoesMB.listaDeSolicitacoesAPersistir}"/>
+                    </p:commandButton>
+                    <p:commandButton value="Cancelar" action="/pages/controller/agendamento/solicitacoes.xhtml?faces-redirect=true"/>                    
+                  </p>
+                </f:facet>
+                Procedimento : #{solicitacoes.des_codigoProcedimento} - 
+                Descrição : #{solicitacoes.des_categoria} / #{solicitacoes.des_nomeexame} - 
+                Valor : <p:outputLabel value="#{solicitacoes.des_valor}">
+                  <f:convertNumber type="currency" minFractionDigits="2"/>
+                </p:outputLabel>
+              </p:dataList>
+            </center>
+          </h:form>
+        </p:panel>
+      </div>
+    </h:form>
+
+    <!-- Dialog para adicionar os procedimentos -->
+    <p:dialog header="Realizar Solicitação" id="dialogSolicitacoes" widgetVar="dialogSolicitacoes"
+              modal="true" appendTo="@(body)">
+      <h:form id="formDialogNewProcedimento">
+        <p:panelGrid columns="2">
+          <p:outputLabel value="Solicitação com nº de procedimento?"/>
+          <p:selectOneRadio value="#{solicitacoesMB.selectTipoProcedimento}">
+            <p:ajax update="inputProcedimento,inputDescricaoExames"/>
+            <f:selectItem itemLabel="Sim" itemValue="selectNumeracao"/>
+            <f:selectItem itemLabel="Não" itemValue="selectNomeProced"/>
+          </p:selectOneRadio>
+          <p:outputLabel value="Número do Procedimento : "/>
+          <p:inputMask value="#{solicitacoesMB.descricaoExames.des_codigoProcedimento}" 
+                       mask="99.99.99.99-9"
+                       id="inputProcedimento" disabled="#{solicitacoesMB.selectTipoProcedimento ne 'selectNumeracao'}">
+            <p:ajax event="blur" listener="#{solicitacoesMB.searchDescricaoExames()}" update="formDialogNewProcedimento" />
+          </p:inputMask>
+          <p:outputLabel value="Nome do Procedimento : "/>
+          <p:inputText value="#{solicitacoesMB.descricaoExames.des_nomeexame}" 
+                       id="inputDescricaoExames" disabled="#{solicitacoesMB.selectTipoProcedimento ne 'selectNomeProced'}">
+            <p:ajax event="blur" listener="#{solicitacoesMB.searchDescricaoExames()}" update="formDialogNewProcedimento"/>
+          </p:inputText>
+          <p:outputLabel value="Profissional Solicitante :"/>
+          <p:selectOneMenu id="selectProfissional" value="#{solicitacoesMB.profissionalSelecionado}"
+                           converter="entityConverter" required="true">
+            <f:selectItem itemLabel="Selecione"/>
+            <f:selectItems value="#{solicitacoesMB.listProfissionais}" var="listProfissionais" 
+                           itemLabel="#{listProfissionais.cliente.cli_nome}"
+                           itemValue="#{listProfissionais}"/>
+          </p:selectOneMenu>
+          <p:outputLabel value="Data da Solicitação"/>
+          <p:calendar navigator="true" mask="true" pattern="dd/MM/yyyy" locale="pt"
+                      value="#{solicitacoesMB.dataSolicitacao}"/>                        
+        </p:panelGrid>
+        <center>
+          <p:panelGrid columns="1" id="gridExames" rendered="#{solicitacoesMB.renderizarDadosEncontrados}">
+            <p:outputLabel value="Dados Encontrados:"/>
+            <p:outputLabel value="#{solicitacoesMB.procedimentoEscolhido.des_nomeexame}"/>
+            <p:outputLabel value="#{solicitacoesMB.procedimentoEscolhido.des_categoria}"/>
+            <p:outputLabel value="#{solicitacoesMB.procedimentoEscolhido.des_codigoProcedimento}"/>
+            <p:outputLabel value="#{solicitacoesMB.procedimentoEscolhido.des_valor}">
+              <f:convertNumber type="currency" minFractionDigits="2"/>
+            </p:outputLabel>
+            <p:commandButton value="Confirmar" actionListener="#{solicitacoesMB.btnConfirmar()}"
+                             update=":formInput:formViewDataList:dataListProcedimentos"
+                             oncomplete="PF('dialogSolicitacoes').hide()"/>
+          </p:panelGrid>
+        </center>
+      </h:form>
+    </p:dialog>
+  </h:body>
+</html>
+

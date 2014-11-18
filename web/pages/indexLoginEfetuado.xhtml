@@ -5,21 +5,52 @@
       xmlns:p="http://primefaces.org/ui"
       xmlns:f="http://java.sun.com/jsf/core"
       >
-   <h:head>
-      <title>Login Efetuado com Sucesso</title>
-   </h:head>
-   <h:body>
-      <h:form>
+  <h:head>
+    <h:outputScript library="js" name="configPrimefaces.js"/>
+    <h:outputStylesheet library="css" name="modelo.css" />
+    <title>Login Efetuado com Sucesso</title>
+  </h:head>
+  <h:body>
+    <h:form>
+      <p:growl id="message" autoUpdate="true" showDetail="true" sticky="true"/>
+
       <p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" />
 
-         <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false"
-                   resizable="false" showHeader="false">           
-            <p:graphicImage value="/resources/loading.gif" />
-         </p:dialog>
+      <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false"
+                resizable="false" showHeader="false">           
+        <p:graphicImage value="/resources/images/icones/loading.gif" />
+      </p:dialog>
 
-      <h:outputLabel value="Seja bem vindo (a) " />
-      <h:outputLabel value="#{loginEfetuadoMB.user}"/>
+      <p:outputLabel value="Seja bem vindo (a) " />
+      <p:outputLabel value="#{loginEfetuadoMB.user.cliente.cli_nome}"/>
+      <p:outputLabel value=". Caso queira alterar sua senha, clique "/>
+      <p:commandLink value="aqui" actionListener="#{loginEfetuadoMB.verificarSenhaEmBranco()}"
+                     onclick="PF('dialogSenha').show()"/>     
+
+      <center>
+        <p:panel styleClass="semborda" style="width: 800px; max-height: 800px">
+          <p:schedule id="schedule" widgetVar="myschedule" locale="pt" >
+          </p:schedule>
+        </p:panel>
+      </center>
+    </h:form>
+
+    <p:dialog id="dialogSenha" header="Definir senha" widgetVar="dialogSenha" modal="true" appendTo="@(body)">
+      <h:form id="formDialog">        
+        <p:panelGrid columns="2">
+          <p:outputLabel value="Senha atual :"/>
+          <p:password id="password" value="#{loginEfetuadoMB.senhaAntiga}" disabled="#{loginEfetuadoMB.renderizarSenhaAtual}"/> 
+          <p:outputLabel value="Digite sua nova Senha :"/>
+          <p:password value="#{loginEfetuadoMB.novaSenha}" feedback="true" 
+                      promptLabel="Digite sua nova Senha" weakLabel="Senha Fraca" goodLabel="Senha razoavelmente forte"
+                      strongLabel="Senha muito forte"/>
+          <p:outputLabel value="Digite sua nova Senha novamente :"/>
+          <p:password value="#{loginEfetuadoMB.validatorSenha}"/>
+        </p:panelGrid>
+        <p:commandButton value="Salvar" actionListener="#{loginEfetuadoMB.alterarSenha()}"
+                         oncomplete="PF('dialogSenha').hide()"/>
       </h:form>
-   </h:body>
+    </p:dialog>
+  </h:body>
 </html>
 

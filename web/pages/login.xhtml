@@ -10,6 +10,11 @@
       <title>Pagina de Login</title>
    </h:head>
    <body>
+     
+     <center>
+       <h:graphicImage value="/resources/images/logosicis.png" height="150px" style="margin-top:60px"/>
+     </center>
+     
       <div id="content" title="div Login">
          <p:dialog header="Faça o seu Login" id="dialog" minWidth="400"
                    width="400" modal="true" closable="false" position="center"
@@ -19,7 +24,7 @@
 
                <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false"
                          resizable="false" showHeader="false">           
-                  <p:graphicImage value="/resources/loading.gif" />
+                  <p:graphicImage value="/resources/images/icones/loading.gif" />
                </p:dialog>
                <p:panelGrid columns="2">
                   <h:outputLabel for="j_username" value="Username :" />

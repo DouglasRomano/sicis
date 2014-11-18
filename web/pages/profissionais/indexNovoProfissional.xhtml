@@ -5,98 +5,105 @@
       xmlns:p="http://primefaces.org/ui"
       xmlns:f="http://java.sun.com/jsf/core">
 
-   <h:head>
-      <title>Cadastro de profissionais</title>
-   </h:head>
-   <h:body>
-      <center>
-         <p:panelGrid columns="1" columnClasses="grid">
-            <h:form>
+  <h:head>
+    <title>Cadastro de profissionais</title>
+  </h:head>
+  <h:body>
+    <center>
+      <p:panelGrid columns="1" columnClasses="grid">
+        <h:form>
 
-               <p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" />
+          <p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" />
 
-         <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false"
-                   resizable="false" showHeader="false">           
-            <p:graphicImage value="/resources/loading.gif" />
-         </p:dialog>
+          <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false"
+                    resizable="false" showHeader="false">           
+            <p:graphicImage value="/resources/images/icones/loading.gif" />
+          </p:dialog>
 
-               <p:growl id="mensagens" showDetail="true" sticky="true"/>
+          <p:growl id="mensagens" autoUpdate="true" showDetail="true" sticky="true"/>
 
-               <p:wizard nextLabel="Avançar" backLabel="Voltar">
+          <p:wizard nextLabel="Avançar" backLabel="Voltar">
 
-                  <p:tab title="Profissional">   
-                     <center>
-                        <p:panelGrid columns="2">
-                           <p:selectOneMenu id="selectCliParametro" value="#{novoProfissionalMB.parametroBusca}">
-                              <f:selectItem itemLabel="Selecione"/>
-                              <f:selectItem itemValue="cli_CNS" itemLabel="SUS"/>
-                              <f:selectItem itemValue="cli_CPF" itemLabel="CPF"/>
-                              <p:ajax event="change" update="inputMaskDoc"/>
-                           </p:selectOneMenu>
-                           <p:inputMask mask="#{novoProfissionalMB.selecionarMask()}" value="#{novoProfissionalMB.parametroValor}" 
-                                        id="inputMaskDoc" disabled="#{empty novoProfissionalMB.parametroBusca}">
-                              <p:ajax event="blur" listener="#{novoProfissionalMB.searchCliente()}" 
-                                      update="mensagens,labelNomeCliente,labelDataNasc,labelNomeMae"/>
-                           </p:inputMask>
-                           <p:outputLabel value="Cargo :"/>
-                           <p:inputText value="#{novoProfissionalMB.profissional.pro_cargo}"/>
-                           <p:outputLabel value="Documentação :"/>
-                           <p:inputText value="#{novoProfissionalMB.profissional.pro_documentacao}">                                        
-                           </p:inputText>
-                           <p:outputLabel value="Nome"/>
-                           <p:outputLabel value="#{novoProfissionalMB.cliente.cli_nome}" id="labelNomeCliente"/>
-                           <p:outputLabel value="Data de Nascimento"/>
-                           <p:outputLabel value="#{novoProfissionalMB.cliente.cli_nasc}" id="labelDataNasc">
-                           <f:convertDateTime pattern="dd/MM/yyyy"/>        
-                           </p:outputLabel>
-                           <p:outputLabel value="Nome da Mãe"/>
-                           <p:outputLabel value="#{novoProfissionalMB.cliente.cli_nomedamae}" id="labelNomeMae"/>
-                        </p:panelGrid>
-                     </center>
-                  </p:tab>
+            <p:tab title="Profissional">   
+              <center>
+                <p:panelGrid columns="2">
+                  <p:selectOneMenu id="selectCliParametro" value="#{novoProfissionalMB.parametroBusca}">
+                    <f:selectItem itemLabel="Selecione"/>
+                    <f:selectItem itemValue="cli_CNS" itemLabel="SUS"/>
+                    <f:selectItem itemValue="cli_CPF" itemLabel="CPF"/>
+                    <p:ajax event="change" update="inputMaskDoc"/>
+                  </p:selectOneMenu>
+                  <p:inputMask mask="#{novoProfissionalMB.selecionarMask()}" value="#{novoProfissionalMB.parametroValor}" 
+                               id="inputMaskDoc" disabled="#{empty novoProfissionalMB.parametroBusca}">
+                    <p:ajax event="blur" listener="#{novoProfissionalMB.searchCliente()}" 
+                            update="labelNomeCliente,labelDataNasc,labelNomeMae"/>
+                  </p:inputMask>
+                  <p:outputLabel value="Cargo :"/>
+                  <p:inputText value="#{novoProfissionalMB.profissional.pro_cargo}"/>
+                  <p:outputLabel value="Documentação :"/>
+                  <p:inputText value="#{novoProfissionalMB.profissional.pro_documentacao}">                                        
+                  </p:inputText>
+                  <p:outputLabel value="Nome"/>
+                  <p:outputLabel value="#{novoProfissionalMB.cliente.cli_nome}" id="labelNomeCliente"/>
+                  <p:outputLabel value="Data de Nascimento"/>
+                  <p:outputLabel value="#{novoProfissionalMB.cliente.cli_nasc}" id="labelDataNasc">
+                    <f:convertDateTime pattern="dd/MM/yyyy"/>        
+                  </p:outputLabel>
+                  <p:outputLabel value="Nome da Mãe"/>
+                  <p:outputLabel value="#{novoProfissionalMB.cliente.cli_nomedamae}" id="labelNomeMae"/>
+                </p:panelGrid>
+              </center>
+            </p:tab>
 
-                  <p:tab title="Unidade de Trabalho">
-                     <center>
-                        <p:outputLabel value="Selecione a Unidade de Trabalho deste Funcionario :"/>
-                        <p:panelGrid columns="1">                                   
-                           <p:selectOneListbox value="#{novoProfissionalMB.unidadeSelecionada}" converter="entityConverter" filter="true">
-                              <f:selectItem itemLabel="Selecione"/>
-                              <f:selectItems value="#{unidadeMB.listUnidades}" itemValue="#{unidadeList}" itemLabel="${unidadeList.local_Descricao}" var="unidadeList"/>                                                                                                                
-                           </p:selectOneListbox>                                                                                               
-                        </p:panelGrid>
-                     </center>
-                  </p:tab>
-                  <p:tab title="Permissões">
-                     <center>
-                        <p:panelGrid columns="1">
-                           <p:outputLabel value="Selecione as permissões :"/>
-                           <p:selectOneListbox value="#{novoProfissionalMB.permissaoSelecionada}" converter="entityConverter" filter="true" style="max-width: 500px; min-width: 400px">
-                              <f:selectItem itemLabel="Selecione"/>
-                              <f:selectItems value="#{permissaoMB.listaDePermissoes}" itemValue="#{permList}" itemLabel="${permList.permi_Descricao}" var="permList"/>                                                                        
-                           </p:selectOneListbox>   
-                        </p:panelGrid>
-                     </center>
-                  </p:tab>
-                  <p:tab title="Confirmar">
-                     <p:panelGrid columns="2">
-                        <p:outputLabel value="Nome :"/>
-                        <p:outputLabel value="#{novoProfissionalMB.cliente.cli_nome}"/>
-                        <p:outputLabel value="Cargo :"/>
-                        <p:outputLabel value="#{novoProfissionalMB.profissional.pro_cargo}"/>
-                        <p:outputLabel value="Documentação :"/>
-                        <p:outputLabel value="#{novoProfissionalMB.profissional.pro_documentacao}"/>
-                        <p:outputLabel value="Unidade :"/>
-                        <p:outputLabel value="#{novoProfissionalMB.unidadeSelecionada.local_Descricao}"/>
-                        <p:outputLabel value="Permissões :"/>
-                        <p:outputLabel value="#{novoProfissionalMB.permissaoSelecionada.permi_Descricao}"/>
-                     </p:panelGrid>
-                     <p:commandButton value="Salvar" actionListener="#{novoProfissionalMB.save()}"/>
-                  </p:tab>
+            <p:tab title="Unidade de Trabalho">
+              <center>
+                <p:outputLabel value="Selecione a Unidade de Trabalho deste Funcionario :"/>
+                <p:panelGrid columns="1">                                   
+                  <p:selectOneListbox value="#{novoProfissionalMB.unidadeSelecionada}" converter="entityConverter" filter="true">
+                    <f:selectItem itemLabel="Selecione"/>
+                    <f:selectItems value="#{unidadeMB.listUnidades}" itemValue="#{unidadeList}" itemLabel="${unidadeList.local_Descricao}" var="unidadeList"/>                                                                                                                
+                  </p:selectOneListbox>                                                                                               
+                </p:panelGrid>
+              </center>
+            </p:tab>
+            <p:tab title="Permissões">
+              <center>
+                <p:panelGrid columns="1">
+                  <p:outputLabel value="Selecione as permissões :"/>
+                  <p:selectOneListbox value="#{novoProfissionalMB.permissaoSelecionada}" converter="entityConverter" filter="true" style="max-width: 500px; min-width: 400px">
+                    <f:selectItem itemLabel="Selecione"/>
+                    <f:selectItems value="#{permissaoMB.listaDePermissoes}" itemValue="#{permList}" itemLabel="${permList.permi_Descricao}" var="permList"/>                                                                        
+                  </p:selectOneListbox>   
+                  <p:outputLabel value="Login :"/>
+                  <p:inputText value="#{novoProfissionalMB.profissional.pro_login}"/>
+                </p:panelGrid>
+              </center>
+            </p:tab>
+            <p:tab title="Confirmar">
+              <p:panelGrid columns="2">
+                <p:outputLabel value="Nome :"/>
+                <p:outputLabel value="#{novoProfissionalMB.cliente.cli_nome}"/>
+                <p:outputLabel value="Cargo :"/>
+                <p:outputLabel value="#{novoProfissionalMB.profissional.pro_cargo}"/>
+                <p:outputLabel value="Documentação :"/>
+                <p:outputLabel value="#{novoProfissionalMB.profissional.pro_documentacao}"/>
+                <p:outputLabel value="Unidade :"/>
+                <p:outputLabel value="#{novoProfissionalMB.unidadeSelecionada.local_Descricao}"/>
+                <p:outputLabel value="Permissões :"/>
+                <p:outputLabel value="#{novoProfissionalMB.permissaoSelecionada.permi_Descricao}"/>
+                <p:outputLabel value="Login"/>
+                <p:outputLabel value="#{novoProfissionalMB.profissional.pro_login}"/>                
+              </p:panelGrid>              
+              <center>
+                <p:commandButton value="Salvar" actionListener="#{novoProfissionalMB.save()}" 
+                                 action="/pages/controller/loginEfetuado.xhtml"/>
+              </center>              
+            </p:tab>
 
-               </p:wizard>
-            </h:form>
-         </p:panelGrid>
-      </center>
-   </h:body>
+          </p:wizard>
+        </h:form>
+      </p:panelGrid>
+    </center>
+  </h:body>
 </html>
 

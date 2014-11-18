@@ -59,7 +59,9 @@ public class NovoProfissionalMB implements Serializable{
         List<Cliente> listCliente;
         
         try {            
-            listCliente = genericDAO.searchObject(Cliente.class, new String[]{parametroBusca}, 
+            listCliente = genericDAO.searchObject(Cliente.class,"cliente",
+                    null, null,
+                    new String[]{parametroBusca}, 
                     new Object[]{parametroValor});
             
             if(listCliente.isEmpty()){
@@ -91,11 +93,14 @@ public class NovoProfissionalMB implements Serializable{
     }
     
     public void save(){
+      facesContext = FacesContext.getCurrentInstance();
         profissional.setCliente(cliente);
         profissional.setPermissao(permissaoSelecionada);
         profissional.setUnidade(unidadeSelecionada);
+        profissional.setPro_senha("123");
         try {
             genericDAO.save(profissional);
+            facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,"Salvo com Sucesso","Profissional foi cadastrado com sucesso"));
         } catch (Exception ex) {
             Logger.getLogger(NovoProfissionalMB.class.getName()).log(Level.SEVERE, null, ex);
         }

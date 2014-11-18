@@ -10,45 +10,43 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 @Entity
-public class Bairro implements Serializable{
+public class Bairro implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	@GeneratedValue(strategy = GenerationType.AUTO)
-    @Id
-    private Long bai_id;
-   
-    @JoinColumn(name = "bai_cid_id",nullable = false)
-    @ManyToOne
-   private Cidade cidade;
-   
-   @Column(nullable = false)
-   private String bai_descricao;
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  @Id
+  private Long bai_id;
 
-    public Long getBai_id() {
-        return bai_id;
-    }
+  @JoinColumn(name = "bai_cid_id", nullable = false)
+  @ManyToOne
+  private Cidade cidade;
 
-    public void setBai_id(Long bai_id) {
-        this.bai_id = bai_id;
-    }
+  @Column(nullable = false)
+  private String bai_descricao;
 
-    public Cidade getCidade() {
-        return cidade;
-    }
+  public Long getBai_id() {
+    return bai_id;
+  }
 
-    public void setCidade(Cidade cidade) {
-        this.cidade = cidade;
-    }
-  
-    public String getBai_descricao() {
-        return bai_descricao;
-    }
+  public void setBai_id(Long bai_id) {
+    this.bai_id = bai_id;
+  }
 
-    public void setBai_descricao(String bai_descricao) {
-        this.bai_descricao = bai_descricao;
-    }
-    
-    
-    
+  public Cidade getCidade() {
+    return cidade;
+  }
+
+  public void setCidade(Cidade cidade) {
+    this.cidade = cidade;
+  }
+
+  public String getBai_descricao() {
+    return bai_descricao;
+  }
+
+  public void setBai_descricao(String bai_descricao) {
+    this.bai_descricao = bai_descricao;
+  }
+
 }

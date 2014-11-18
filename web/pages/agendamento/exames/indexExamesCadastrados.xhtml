@@ -4,69 +4,77 @@
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:p="http://primefaces.org/ui"
       xmlns:f="http://java.sun.com/jsf/core">
-   <h:head>
-      <title>Exames Cadastrados</title>
-      <h:outputStylesheet library="css" name="modelo.css" />
-   </h:head>
-   <h:body>
+  <h:head>
+    <title>Exames Cadastrados</title>
+    <h:outputStylesheet library="css" name="modelo.css" />
+  </h:head>
+  <h:body>
 
-      <h:form id="formDialog" styleClass="noborderTable">
+    <h:form id="formDatatable" styleClass="noborderTable">
 
-         <p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" />
+      <p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" />
 
-         <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" 
-                   resizable="false" showHeader="false" appendTo="@(body)">
-            <p:outputLabel value="Carregando... Aguarde para continuar!"/>
-            <p:graphicImage name="/resources/loading.gif" />
-         </p:dialog>
+      <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" 
+                resizable="false" showHeader="false" appendTo="@(body)">
+        <p:graphicImage name="/resources/images/icones/loading.gif" />
+      </p:dialog>
 
-         <p:growl id="mensagens" showDetail="true" sticky="true" /> 
+      <p:growl id="mensagens" showDetail="true" sticky="true" /> 
 
-         <p:dialog header="Preencha os campos para salvar"  id="dialogSaves" widgetVar="dialogSave">
-            <p:panelGrid columns="2">
-               <p:outputLabel value="Nome do Exame :"/>
-               <p:inputText value="#{examesCadastradosMB.descricaoExames.des_nomeexame}" required="true"/>
-               <p:outputLabel value="Categoria :"/>
-               <p:inputText value="#{examesCadastradosMB.descricaoExames.des_categoria}" required="true"/>
-               <p:outputLabel value="Codigo do Procedimento :"/>
-               <p:inputText value="#{examesCadastradosMB.descricaoExames.des_codigoProcedimento}" />
-               <p:outputLabel value="Valor :"/>
-               <p:inputText value="#{examesCadastradosMB.descricaoExames.des_valor}"/>                                        
-               <p:panelGrid columns="1">
-                  <p:commandButton value="Salvar" actionListener="#{examesCadastradosMB.saveOrUpdate()}" action="#{examesCadastradosMB.listarExames()}"
-                                   update="mensagens,formDialog" oncomplete="PF('dialogSave').hide()"/>
-               </p:panelGrid>
-            </p:panelGrid>
-         </p:dialog>
+      <!-- dataTable com os objetos -->
+      <center>
+        <p:dataTable id="unidadeData" var="unidadeDT" value="#{examesCadastradosMB.listExames}" 
+                     rowKey="#{unidadeDT.des_id}" styleClass="styleSizeDatatable">
+          <f:facet name="header">
+            <p:spacer height="10" width="160"/>
+            Exames
+            <p:spacer height="10" width="150"/>
+            <p:commandButton value="Novo" oncomplete="PF('dialogSave').show();"/>
+          </f:facet>
 
-         <!-- dataTable com os objetos -->
-         <p:dataTable id="unidadeData" var="unidadeDT" value="#{examesCadastradosMB.listExames}" rowKey="#{unidadeDT.des_id}" style="max-width: 700px; min-width: 500px">
-            <f:facet name="header">
-               <p:spacer height="10" width="160"/>
-               Exames
-               <p:spacer height="10" width="150"/>
-               <p:commandButton value="Novo" oncomplete="PF('dialogSave').show();"/>
-            </f:facet>
+          <p:column selectionMode="single" style="width:16px;text-align:center"/>
+          <p:column headerText="Nome do Exame">
+            <p:outputLabel value="#{unidadeDT.des_nomeexame}"/>
+          </p:column>
+          <p:column headerText="Categoria">
+            <p:outputLabel value="#{unidadeDT.des_categoria}"/>
+          </p:column>
+          <p:column headerText="Procedimento">
+            <p:outputLabel value="#{unidadeDT.des_codigoProcedimento}"/>
+          </p:column>
+          <p:column headerText="Valor">
+            <p:outputLabel value="#{unidadeDT.des_valor}">
+              <f:convertNumber type="currency"/>
+            </p:outputLabel>
+          </p:column>                
+          <f:facet name="footer">
+            <p:commandButton value="Alterar"/>
+            <p:commandButton value="Excluir"/>
+          </f:facet>
+        </p:dataTable>   
+      </center>
+    </h:form>
 
-            <p:column selectionMode="single" style="width:16px;text-align:center"/>
-            <p:column headerText="Nome do Exame">
-               <p:outputLabel value="#{unidadeDT.des_nomeexame}"/>
-            </p:column>
-            <p:column headerText="Categoria">
-               <p:outputLabel value="#{unidadeDT.des_categoria}"/>
-            </p:column>
-            <p:column headerText="Procedimento">
-               <p:outputLabel value="#{unidadeDT.des_codigoProcedimento}"/>
-            </p:column>
-            <p:column headerText="Valor">
-               <p:outputLabel value="#{unidadeDT.des_valor}"/>
-            </p:column>                
-            <f:facet name="footer">
-               <p:commandButton value="Alterar"/>
-               <p:commandButton value="Excluir"/>
-            </f:facet>
-         </p:dataTable>            
+
+    <p:dialog header="Preencha os campos para salvar" modal="true" appendTo="@(body)"
+              id="dialogSaves" widgetVar="dialogSave">     
+      <h:form id="formDialog">
+        <p:panelGrid columns="2">
+          <p:outputLabel value="Nome do Procedimento :"/>
+          <p:inputText value="#{examesCadastradosMB.descricaoExames.des_nomeexame}" required="true"/>
+          <p:outputLabel value="Categoria :"/>
+          <p:inputText value="#{examesCadastradosMB.descricaoExames.des_categoria}" required="true"/>
+          <p:outputLabel value="Codigo do Procedimento :"/>
+          <p:inputMask value="#{examesCadastradosMB.descricaoExames.des_codigoProcedimento}" mask="99.99.99.99-9" />
+          <p:outputLabel value="Valor :"/>
+          <p:inputText value="#{examesCadastradosMB.descricaoExames.des_valor}" required="true">
+            <f:convertNumber pattern="0,00" type="currency"/>          
+          </p:inputText>                                                        
+          <p:commandButton value="Salvar" actionListener="#{examesCadastradosMB.saveOrUpdate()}" action="#{examesCadastradosMB.listarExames()}"
+                           update=":formDatatable" oncomplete="PF('dialogSave').hide()"/>          
+        </p:panelGrid> 
       </h:form>
-   </h:body>
+    </p:dialog>
+  </h:body>
 </html>
 

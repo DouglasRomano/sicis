@@ -6,6 +6,7 @@
       xmlns:f="http://java.sun.com/jsf/core">
    <h:head>
       <h:outputStylesheet library="css" name="modelo.css" />
+      <h:outputScript library="js" name="configPrimefaces.js"/>
       <title>Pacientes</title>
    </h:head>
 
@@ -17,7 +18,7 @@
 
             <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false"
                       resizable="false" showHeader="false">           
-               <p:graphicImage value="/resources/loading.gif" />
+               <p:graphicImage value="/resources/images/icones/loading.gif" />
             </p:dialog>
 
             <p:growl id="mensagens" showDetail="true" sticky="true" />
@@ -83,6 +84,7 @@
                         <p:inputText value="#{novoPacienteMB.cliente.cli_nomedopai}" />
                         <p:outputLabel value="Data de Nascimento :" />
                         <p:calendar navigator="true" mask="true" pattern="dd/MM/yyyy"
+                                    locale="pt"
                                     value="#{novoPacienteMB.cliente.cli_nasc}">
                         </p:calendar>
                         <p:outputLabel value="Sexo :" />

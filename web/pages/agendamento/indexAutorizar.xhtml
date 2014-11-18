@@ -1,0 +1,82 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+  <h:head>
+    <title>Autorizar Procedimentos</title>
+    <h:outputScript library="js" name="configPrimefaces.js"/>
+  </h:head>
+  <h:body>
+    
+    <p:dialog id="dialogAutorizar" widgetVar="dialogAutorizar" appendTo="@(body)" modal="true">
+        <h:form id="formDialog">
+          <p:panelGrid columns="2">
+            <p:outputLabel value="Local de Realização do Procedimento :"/>
+            <p:selectOneMenu id="selectUnidade" converter="entityConverter"
+                             value="#{autorizarMB.autorizar.localDeRealizacao}">
+              <f:selectItem itemLabel="A criterio do Paciente" itemValue="" />
+              <f:selectItems value="#{autorizarMB.listUnidades}" 
+                             itemLabel="#{listUnidades.local_Descricao}"
+                             itemValue="#{listUnidades}"
+                             var="listUnidades"/>
+            </p:selectOneMenu>
+            <p:outputLabel value="Selecione a data Agendada :"/>
+            <p:calendar navigator="true" mask="true" pattern="dd/MM/yyyy HH:mm" locale="pt"
+                        converter="timestampConverter"
+                        value="#{autorizarMB.autorizar.aut_data_horaAgendada}" required="true">
+              
+            </p:calendar>
+          </p:panelGrid>
+          <center>
+            <p:commandButton value="Confirmar Agendamento" 
+                             actionListener="#{autorizarMB.btnConfirmarAgendamento()}"
+                             oncomplete="PF('dialogAutorizar').hide()"
+                             update=":formTable"/>
+          </center>
+        </h:form>
+      </p:dialog>
+    
+    <h:form id="formTable">
+
+      <p:growl id="mensagens" autoUpdate="true" sticky="true" showDetail="true"/>
+      <center>
+        <p:dataTable id="autorizarTable" var="autorizarTable" value="#{autorizarMB.solicitacoesPendentes}"
+                     rowKey="#{autorizarTable.solExa_id}">
+          <f:facet name="header">
+            Solicitações Pendentes
+          </f:facet>
+
+          <p:column headerText="Nº do Pedido">
+            <p:outputLabel value="#{autorizarTable.solExa_Pedido}"/>
+          </p:column>
+
+          <p:column headerText="Paciente">
+            <p:outputLabel value="#{autorizarTable.solicitacao.cliente.cli_nome}"/>
+          </p:column>
+
+          <p:column headerText="Codigo">
+            <p:outputLabel value="#{autorizarTable.descricaoExames.des_codigoProcedimento}"/>
+          </p:column>
+
+          <p:column headerText="Descrição">
+            <p:outputLabel value="#{autorizarTable.descricaoExames.des_nomeexame}"/>
+          </p:column>
+
+          <p:column headerText="Solicitante">
+            <p:outputLabel value="#{autorizarTable.solicitacao.profissionalPedido.cliente.cli_nome}"/>
+          </p:column>
+
+          <p:column headerText="Solicitante" style="text-align: center">
+            <p:commandButton value="Autorizar" 
+                             actionListener="#{autorizarMB.selecionarProcedimento(autorizarTable)}"
+                             />
+          </p:column>
+
+        </p:dataTable>
+      </center>
+    </h:form>
+  </h:body>
+</html>
+
