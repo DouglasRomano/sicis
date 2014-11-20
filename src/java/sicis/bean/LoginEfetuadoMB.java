@@ -11,6 +11,9 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import org.primefaces.context.RequestContext;
+import org.primefaces.model.DefaultScheduleEvent;
+import org.primefaces.model.DefaultScheduleModel;
+import org.primefaces.model.ScheduleModel;
 
 import org.springframework.security.core.context.SecurityContextHolder;
 import sicis.dao.GenericDAO;
@@ -32,13 +35,17 @@ public class LoginEfetuadoMB implements Serializable {
 
   private GenericDAO genericDAO;
 
+  private ScheduleModel eventos;
+
   private transient FacesContext facesContext;
 
   @PostConstruct
-  public void loginEfetuado() {
+  public void init() {
     userRede = SecurityContextHolder.getContext().getAuthentication().getName();
     genericDAO = new GenericDAO();
 
+    eventos = new DefaultScheduleModel();
+    
     limparInputs();
     verificarUsuario();
     verificarSenhaEmBranco();
@@ -53,7 +60,7 @@ public class LoginEfetuadoMB implements Serializable {
   public void verificarUsuario() {
     List<Profissional> listProfissional;
     try {
-      listProfissional = genericDAO.searchObject(Profissional.class,"profissional",
+      listProfissional = genericDAO.searchObject(Profissional.class, "profissional",
               null, null,
               new String[]{"pro_login"}, new Object[]{userRede});
       user = listProfissional.get(0);

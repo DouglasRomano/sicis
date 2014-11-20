@@ -48,13 +48,6 @@ public class AutorizarMB implements Serializable {
    
   }
 
-  private Date pegarDataAtual() {
-    Calendar calendar = new GregorianCalendar();
-    Date date = new Date();
-    calendar.setTime(date);
-    return calendar.getTime();
-  }
-
   public void selecionarProcedimento(SolicitacoesExames solicitacoes) {
     solicitacaoSelecionada = solicitacoes;
     RequestContext.getCurrentInstance().execute("PF('dialogAutorizar').show()");

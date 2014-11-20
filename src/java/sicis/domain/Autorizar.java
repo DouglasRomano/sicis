@@ -1,7 +1,6 @@
 package sicis.domain;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -12,6 +11,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+
 
 @Entity(name = "examesautorizados")
 public class Autorizar implements Serializable {
@@ -33,11 +33,13 @@ public class Autorizar implements Serializable {
   @ManyToOne
   private Unidade localDeRealizacao;
  
+  @Temporal(TemporalType.DATE)
   @Column
-  private Timestamp aut_data_horaAgendada;
+  private Date aut_data_horaAgendada;
   
+  @Temporal(TemporalType.DATE)
   @Column
-  private Timestamp aut_data_horaAtual;
+  private Date aut_data_horaAtual;
   
   
   // getters and setters
@@ -75,19 +77,19 @@ public class Autorizar implements Serializable {
     this.localDeRealizacao = localDeRealizacao;
   }
 
-  public Timestamp getAut_data_horaAgendada() {
+  public Date getAut_data_horaAgendada() {
     return aut_data_horaAgendada;
   }
 
-  public void setAut_data_horaAgendada(Timestamp aut_data_horaAgendada) {
+  public void setAut_data_horaAgendada(Date aut_data_horaAgendada) {
     this.aut_data_horaAgendada = aut_data_horaAgendada;
   }
 
-  public Timestamp getAut_data_horaAtual() {
+  public Date getAut_data_horaAtual() {
     return aut_data_horaAtual;
   }
 
-  public void setAut_data_horaAtual(Timestamp aut_data_horaAtual) {
+  public void setAut_data_horaAtual(Date aut_data_horaAtual) {
     this.aut_data_horaAtual = aut_data_horaAtual;
   }
 
